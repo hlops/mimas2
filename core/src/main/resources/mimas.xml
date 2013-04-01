@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mimas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="mimas.xsd">
+    <version>1.0.1</version>
+    <dateFormat>dd.MM.YYY hh:mm:ss</dateFormat>
+    <defaultMimasFolder>.mimas</defaultMimasFolder>
+    <photoConfig>
+        <version>1.0.1</version>
+    </photoConfig>
+</mimas>

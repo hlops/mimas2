@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="foto" type="photoConfig"/>
+
+    <xs:element name="mimas" type="mimasConfig"/>
+
+    <xs:element name="version" type="version"/>
+
+    <xs:complexType name="mimasConfig">
+        <xs:complexContent>
+            <xs:extension base="versionConfig">
+                <xs:sequence>
+                    <xs:element name="dateFormat" type="xs:string"/>
+                    <xs:element name="defaultMimasFolder" type="xs:string"/>
+                    <xs:element name="photoConfig" type="photoConfig"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="versionConfig" abstract="true">
+        <xs:sequence>
+            <xs:element ref="version"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="photoConfig">
+        <xs:complexContent>
+            <xs:extension base="versionConfig">
+                <xs:sequence/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="version">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+</xs:schema>
