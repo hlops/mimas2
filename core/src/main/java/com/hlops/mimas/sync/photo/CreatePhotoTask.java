@@ -1,9 +1,12 @@
 package com.hlops.mimas.sync.photo;
 
+import com.hlops.mimas.data.EntityKey;
 import com.hlops.mimas.data.bean.photo.ImageSize;
 import com.hlops.mimas.data.bean.photo.Photo;
+import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
 import com.hlops.mimas.data.key.photo.PhotoKey;
 import com.hlops.mimas.sync.EntityKeyFuture;
+import com.hlops.mimas.sync.TaskFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,10 +38,19 @@ public class CreatePhotoTask extends FutureTask<Photo> implements EntityKeyFutur
         return key;
     }
 
-    public static Photo getPhoto(PhotoKey key) throws IOException {
+    private static Photo getPhoto(PhotoKey key) throws IOException {
         BufferedImage image = ImageIO.read(key.getFile());
         Photo foto = new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()));
         return foto;
     }
 
+    private static TaskFactory<CreatePhotoAlbumTask> taskFactory = new TaskFactory<CreatePhotoAlbumTask>() {
+        public CreatePhotoAlbumTask create(EntityKey key) {
+            return new CreatePhotoAlbumTask((PhotoAlbumKey) key);
+        }
+    };
+
+    public static TaskFactory<CreatePhotoAlbumTask> getFactory() {
+        return taskFactory;
+    }
 }

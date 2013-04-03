@@ -1,10 +1,11 @@
 package com.hlops.mimas.sync.photo;
 
 import com.hlops.mimas.config.MimasConfig;
+import com.hlops.mimas.data.EntityKey;
 import com.hlops.mimas.data.bean.photo.PhotoAlbum;
 import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
-import com.hlops.mimas.data.key.photo.PhotoKey;
 import com.hlops.mimas.sync.EntityKeyFuture;
+import com.hlops.mimas.sync.TaskFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +16,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -30,7 +30,7 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
 
     private final PhotoAlbumKey key;
 
-    public CreatePhotoAlbumTask(final PhotoAlbumKey key) {
+    CreatePhotoAlbumTask(final PhotoAlbumKey key) {
         super(new Callable<PhotoAlbum>() {
             public PhotoAlbum call() throws Exception {
                 return getAlbum(key);
@@ -43,7 +43,7 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
         return key;
     }
 
-    public static PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
+    private static PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
         File configFile = new File(key.getFile(), MimasConfig.getInstance().getDefaultMimasFolder());
         PhotoAlbum album;
         if (configFile.exists()) {
@@ -61,7 +61,7 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
     }
 
     @SuppressWarnings("RedundantIfStatement")
-    public static boolean isActual(File configFile, PhotoAlbum album) {
+    private static boolean isActual(File configFile, PhotoAlbum album) {
         if (!configFile.exists() || configFile.lastModified() < configFile.getParentFile().lastModified()) {
             return false;
         }
@@ -71,7 +71,7 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
         return true;
     }
 
-    public static void load(final PhotoAlbum album, PhotoAlbumKey key, File configFile) {
+    private static void load(final PhotoAlbum album, PhotoAlbumKey key, File configFile) {
         File[] files = configFile.getParentFile().listFiles(new FileFilter() {
             public boolean accept(File f) {
                 //noinspection SimplifiableIfStatement
@@ -86,16 +86,18 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
             for (File f : files) {
                 //addImage(album, f);
                 //System.out.println(f);
+/*
                 try {
                     album.getItems().add(CreatePhotoTask.getPhoto(new PhotoKey(key, f.getName())));
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+*/
             }
         }
     }
 
-    public static boolean wildcardMatches(File f, @Nullable String wildcards) {
+    private static boolean wildcardMatches(File f, @Nullable String wildcards) {
         if (StringUtils.isNotBlank(wildcards)) {
             for (String wildcard : wildcards.split("[ ,;]")) {
                 if (FilenameUtils.wildcardMatch(f.getName(), wildcard, IOCase.INSENSITIVE)) {
@@ -106,11 +108,21 @@ public class CreatePhotoAlbumTask extends FutureTask<PhotoAlbum> implements Enti
         return false;
     }
 
-    public static void save(PhotoAlbum album, File configFile) throws JAXBException {
+    private static void save(PhotoAlbum album, File configFile) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(PhotoAlbum.class);
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(album, configFile);
     }
 
+
+    private static TaskFactory<CreatePhotoAlbumTask> taskFactory = new TaskFactory<CreatePhotoAlbumTask>() {
+        public CreatePhotoAlbumTask create(EntityKey key) {
+            return new CreatePhotoAlbumTask((PhotoAlbumKey) key);
+        }
+    };
+
+    public static TaskFactory<CreatePhotoAlbumTask> getFactory() {
+        return taskFactory;
+    }
 }
