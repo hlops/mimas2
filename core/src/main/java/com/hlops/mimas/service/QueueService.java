@@ -1,9 +1,9 @@
 package com.hlops.mimas.service;
 
 import com.hlops.mimas.data.EntityKey;
-import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
-import com.hlops.mimas.sync.EntityKeyFuture;
-import com.hlops.mimas.sync.TaskFactory;
+import com.hlops.mimas.sync.CallableTask;
+
+import java.util.concurrent.Future;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,5 +14,6 @@ import com.hlops.mimas.sync.TaskFactory;
  */
 public interface QueueService {
 
-    <T extends EntityKeyFuture> T get(EntityKey key, TaskFactory<T> factory);
+    <T> Future<T> getFuture(CallableTask<? extends EntityKey, T> callableTask);
 }
+

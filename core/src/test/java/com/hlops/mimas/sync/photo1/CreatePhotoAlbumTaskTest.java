@@ -1,10 +1,9 @@
-package com.hlops.mimas.sync.photo;
+package com.hlops.mimas.sync.photo1;
 
 import com.google.inject.Inject;
-import com.hlops.mimas.data.EntityKey;
 import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
 import com.hlops.mimas.module.ServiceModule;
-import com.hlops.mimas.service.QueueService;
+import com.hlops.mimas.service.photo.PhotoService;
 import com.hlops.mimas.test.GuiceJUnitRunner;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,23 +23,23 @@ import java.io.File;
 public class CreatePhotoAlbumTaskTest extends Assert {
 
     @Inject
-    private QueueService queue;
+    private PhotoService photoService;
 
     class TestThread extends Thread {
-        private EntityKey albumKey;
+        private PhotoAlbumKey albumKey;
 
-        TestThread(ThreadGroup threadGroup, String name, EntityKey albumKey) {
+        TestThread(ThreadGroup threadGroup, String name, PhotoAlbumKey albumKey) {
             super(threadGroup, name);
             this.albumKey = albumKey;
         }
 
         @Override
         public void run() {
-            CreatePhotoAlbumTask createPhotoAlbumTask = queue.get(albumKey, CreatePhotoAlbumTask.getFactory());
             try {
-                System.out.println(createPhotoAlbumTask.get());
+                System.out.println(photoService.getAlbum(albumKey));
             } catch (Exception e) {
-                fail(e.getMessage());
+                e.printStackTrace();
+                fail();
             }
         }
     }
@@ -51,20 +50,22 @@ public class CreatePhotoAlbumTaskTest extends Assert {
         File path = new File("core/src/test/resources/foto/2");
         PhotoAlbumKey albumKey = new PhotoAlbumKey(path);
 
-        TestThread[] threads = new TestThread[10];
+        TestThread[] threads = new TestThread[20];
 
         ThreadGroup threadGroup = new ThreadGroup("test");
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new TestThread(threadGroup, "thread#" + i, albumKey);
         }
 
+        long t = System.currentTimeMillis();
         for (Thread thread : threads) {
             thread.start();
-            Thread.sleep(5);
         }
         for (Thread thread : threads) {
             thread.join();
         }
+
+        System.out.println(((System.currentTimeMillis() - t) / 100 / 10.));
 /*
         PhotoAlbum album = CreatePhotoAlbumTask.getAlbum(new PhotoAlbumKey(path));
 */

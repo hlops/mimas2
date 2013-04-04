@@ -3,8 +3,7 @@ package com.hlops.mimas.service.impl;
 import com.hlops.mimas.config.MimasConfig;
 import com.hlops.mimas.data.EntityKey;
 import com.hlops.mimas.service.QueueService;
-import com.hlops.mimas.sync.EntityKeyFuture;
-import com.hlops.mimas.sync.TaskFactory;
+import com.hlops.mimas.sync.CallableTask;
 
 import java.util.concurrent.*;
 
@@ -18,10 +17,11 @@ import java.util.concurrent.*;
 public class QueueServiceImpl implements QueueService {
 
     private final ThreadPoolExecutor threadExecutor;
-    private final ConcurrentHashMap<Object, EntityKeyFuture> sync = new ConcurrentHashMap<Object, EntityKeyFuture>();
+    private final ConcurrentHashMap<EntityKey, Future> syncMap = new ConcurrentHashMap<EntityKey, Future>();
 
     public QueueServiceImpl() {
         int executors = MimasConfig.getInstance().getQueueExecutors();
+        executors = 5;
         threadExecutor = new ThreadPoolExecutor(executors, executors, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         threadExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
@@ -30,23 +30,35 @@ public class QueueServiceImpl implements QueueService {
         });
     }
 
-    public <T extends EntityKeyFuture> T get(EntityKey key, TaskFactory<T> factory) {
-        @SuppressWarnings("unchecked") T result = (T) sync.get(key);
+    public <T> Future<T> getFuture(CallableTask<? extends EntityKey, T> callableTask) {
+/*
+        System.out.println(threadExecutor.getTaskCount() + "\t" +
+                threadExecutor.getActiveCount() + "\t" +
+                threadExecutor.getCompletedTaskCount() + "\t" +
+                threadExecutor.getTaskCount() + "\t"
+        );
+*/
+        EntityKey key = callableTask.getKey();
+        @SuppressWarnings("unchecked") Future<T> result = syncMap.get(key);
         if (result != null) {
+            return result;
+/*
             if (result.isDone()) {
-                sync.remove(key, result);
+                syncMap.remove(key, result);
             } else {
                 return result;
             }
+*/
         }
 
-        T newFuture;
+        FutureTask<T> newFuture = new FutureTask<T>(callableTask);
         //noinspection unchecked
-        result = (T) sync.putIfAbsent(key, newFuture = factory.create(key));
+        result = (Future<T>) syncMap.putIfAbsent(key, newFuture);
         if (result == null) {
+            threadExecutor.execute(newFuture);
             result = newFuture;
-            threadExecutor.execute(result);
         }
         return result;
     }
+
 }

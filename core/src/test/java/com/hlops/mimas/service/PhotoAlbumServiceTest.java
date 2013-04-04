@@ -2,7 +2,9 @@ package com.hlops.mimas.service;
 
 import com.google.inject.Inject;
 import com.hlops.mimas.data.bean.photo.PhotoAlbum;
+import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
 import com.hlops.mimas.module.ServiceModule;
+import com.hlops.mimas.service.photo.PhotoService;
 import com.hlops.mimas.test.GuiceJUnitRunner;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,12 +26,12 @@ import java.io.File;
 public class PhotoAlbumServiceTest extends Assert {
 
     @Inject
-    private PhotoAlbumService photoAlbumService;
+    private PhotoService photoService;
 
     @Test
     public void testGetConfig() throws Exception {
         File path = new File("core/src/test/resources/foto");
-        PhotoAlbum config = photoAlbumService.getAlbum(path);
+        PhotoAlbum config = photoService.getAlbum(new PhotoAlbumKey(path));
 
         JAXBContext jc = JAXBContext.newInstance(PhotoAlbum.class);
         Marshaller marshaller = jc.createMarshaller();
