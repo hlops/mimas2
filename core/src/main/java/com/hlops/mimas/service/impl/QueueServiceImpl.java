@@ -2,10 +2,15 @@ package com.hlops.mimas.service.impl;
 
 import com.hlops.mimas.config.MimasConfig;
 import com.hlops.mimas.data.EntityKey;
+import com.hlops.mimas.data.KeyProvider;
+import com.hlops.mimas.data.TaskKey;
 import com.hlops.mimas.service.QueueService;
+import com.hlops.mimas.sync.AbstractTask;
 import com.hlops.mimas.sync.CallableTask;
+import com.hlops.mimas.sync.RunnableTask;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,40 +23,37 @@ public class QueueServiceImpl implements QueueService {
 
     private final ThreadPoolExecutor threadExecutor;
     private final ConcurrentHashMap<EntityKey, Future> syncMap = new ConcurrentHashMap<EntityKey, Future>();
+    private final AtomicInteger poolSize = new AtomicInteger();
 
     public QueueServiceImpl() {
-        int executors = MimasConfig.getInstance().getQueueExecutors();
-        executors = 5;
-        threadExecutor = new ThreadPoolExecutor(executors, executors, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-        threadExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
-            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                //To change body of implemented methods use File | Settings | File Templates.
+        poolSize.set(MimasConfig.getInstance().getQueueExecutors());
+        // poolSize.set(50);
+        threadExecutor = new ThreadPoolExecutor(poolSize.intValue(), poolSize.intValue(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()) {
+            @Override
+            protected void beforeExecute(Thread t, Runnable r) {
+                super.beforeExecute(t, r);
             }
-        });
+
+            @Override
+            protected void afterExecute(Runnable r, Throwable t) {
+                super.afterExecute(r, t);
+                KeyFutureTask task = (KeyFutureTask) r;
+                System.out.println("remove " + syncMap.remove(task.getKey()));
+                if (task.isWaitingTask) {
+                    applyPoolSize(poolSize.decrementAndGet());
+                }
+            }
+        };
     }
 
-    public <T> Future<T> getFuture(CallableTask<? extends EntityKey, T> callableTask) {
-/*
-        System.out.println(threadExecutor.getTaskCount() + "\t" +
-                threadExecutor.getActiveCount() + "\t" +
-                threadExecutor.getCompletedTaskCount() + "\t" +
-                threadExecutor.getTaskCount() + "\t"
-        );
-*/
+    public <T> Future<T> getFuture(CallableTask<T> callableTask) {
         EntityKey key = callableTask.getKey();
         @SuppressWarnings("unchecked") Future<T> result = syncMap.get(key);
         if (result != null) {
             return result;
-/*
-            if (result.isDone()) {
-                syncMap.remove(key, result);
-            } else {
-                return result;
-            }
-*/
         }
 
-        FutureTask<T> newFuture = new FutureTask<T>(callableTask);
+        FutureTask<T> newFuture = new KeyFutureTask<T>(callableTask, false);
         //noinspection unchecked
         result = (Future<T>) syncMap.putIfAbsent(key, newFuture);
         if (result == null) {
@@ -61,4 +63,62 @@ public class QueueServiceImpl implements QueueService {
         return result;
     }
 
+    public void waitFuture(RunnableTask runnableTask) throws ExecutionException, InterruptedException {
+        EntityKey key = runnableTask.getKey();
+        @SuppressWarnings("unchecked") Future result = syncMap.get(key);
+        if (result == null) {
+            FutureTask newFuture = new KeyFutureTask(runnableTask, true);
+            //noinspection unchecked
+            result = syncMap.putIfAbsent(key, newFuture);
+            if (result == null) {
+                applyPoolSize(poolSize.incrementAndGet());
+                threadExecutor.execute(newFuture);
+                result = newFuture;
+            }
+        }
+        System.out.println("waiting");
+        result.get();
+    }
+
+    private synchronized void applyPoolSize(int n) {
+        if (n > threadExecutor.getCorePoolSize()) {
+            threadExecutor.setCorePoolSize(n);
+            threadExecutor.setMaximumPoolSize(n);
+            System.out.println("applyPoolSize: " + n + " " + threadExecutor.getCorePoolSize() + " " + threadExecutor.getActiveCount() + " " + threadExecutor.prestartAllCoreThreads());
+        }
+    }
+
+    class KeyFutureTask<T> extends FutureTask<T> implements KeyProvider<TaskKey> {
+
+        private final boolean isWaitingTask;
+        private final TaskKey key;
+        private final AbstractTask task;
+
+        public KeyFutureTask(CallableTask<T> callable, boolean waitingTask) {
+            super(callable);
+            isWaitingTask = waitingTask;
+            this.key = callable.getKey();
+            this.task = callable;
+        }
+
+        public KeyFutureTask(RunnableTask runnable, boolean waitingTask) {
+            super(runnable, null);
+            isWaitingTask = waitingTask;
+            this.key = runnable.getKey();
+            this.task = runnable;
+        }
+
+        @Override
+        public TaskKey getKey() {
+            return key;
+        }
+
+        public AbstractTask getTask() {
+            return task;
+        }
+
+        public boolean isWaitingTask() {
+            return isWaitingTask;
+        }
+    }
 }

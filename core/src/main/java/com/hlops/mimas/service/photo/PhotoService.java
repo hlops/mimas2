@@ -22,5 +22,4 @@ public interface PhotoService {
 
     Photo getPhoto(PhotoKey key) throws JAXBException, ExecutionException, InterruptedException;
 
-    Photo getPhoto(PhotoKey key, int timeout) throws JAXBException, ExecutionException, InterruptedException, TimeoutException;
 }

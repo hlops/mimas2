@@ -1,8 +1,9 @@
 package com.hlops.mimas.service;
 
-import com.hlops.mimas.data.EntityKey;
 import com.hlops.mimas.sync.CallableTask;
+import com.hlops.mimas.sync.RunnableTask;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -14,6 +15,8 @@ import java.util.concurrent.Future;
  */
 public interface QueueService {
 
-    <T> Future<T> getFuture(CallableTask<? extends EntityKey, T> callableTask);
+    <T> Future<T> getFuture(CallableTask<T> callableTask);
+
+    void waitFuture(RunnableTask callableTask) throws ExecutionException, InterruptedException;
 }
 

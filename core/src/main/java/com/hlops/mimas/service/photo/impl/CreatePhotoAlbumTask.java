@@ -1,25 +1,17 @@
 package com.hlops.mimas.service.photo.impl;
 
-import com.google.inject.Guice;
 import com.hlops.mimas.config.MimasConfig;
+import com.hlops.mimas.data.TaskKey;
 import com.hlops.mimas.data.bean.photo.PhotoAlbum;
 import com.hlops.mimas.data.key.photo.PhotoAlbumKey;
-import com.hlops.mimas.data.key.photo.PhotoKey;
-import com.hlops.mimas.module.ServiceModule;
-import com.hlops.mimas.service.photo.PhotoService;
+import com.hlops.mimas.service.QueueService;
 import com.hlops.mimas.sync.CallableTask;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOCase;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,22 +20,26 @@ import java.util.concurrent.TimeoutException;
  * Time: 21:22
  * To change this template use File | Settings | File Templates.
  */
-class CreatePhotoAlbumTask implements CallableTask<PhotoAlbumKey, PhotoAlbum> {
+class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
 
-    private final PhotoAlbumKey key;
-    private PhotoService photoService;
+    private final PhotoAlbumKey albumKey;
+    private final TaskKey taskKey;
+    private final QueueService queue;
 
-    CreatePhotoAlbumTask(PhotoAlbumKey key, PhotoService photoService) {
-        this.key = key;
-        this.photoService = photoService;
+    CreatePhotoAlbumTask(PhotoAlbumKey albumKey, QueueService queue) {
+        this.albumKey = albumKey;
+        this.queue = queue;
+        taskKey = new TaskKey(this.getClass(), albumKey);
     }
 
-    public PhotoAlbumKey getKey() {
-        return key;
+    @Override
+    public TaskKey getKey() {
+        return taskKey;
     }
 
+    @Override
     public PhotoAlbum call() throws Exception {
-        return getAlbum(key);
+        return getAlbum(albumKey);
     }
 
     private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
@@ -56,6 +52,7 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbumKey, PhotoAlbum> {
             album = new PhotoAlbum(key.getFile().getName());
         }
         if (!isActual(configFile, album)) {
+            System.out.println("actualize: "+albumKey);
             load(album, key, configFile);
             save(album, configFile);
         }
@@ -74,59 +71,14 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbumKey, PhotoAlbum> {
         return true;
     }
 
-    private void load(final PhotoAlbum album, PhotoAlbumKey key, File configFile) {
-        File[] files = configFile.getParentFile().listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                //noinspection SimplifiableIfStatement
-                if (wildcardMatches(f, MimasConfig.getInstance().getPhotoConfig().getIncludedWildcard())) {
-                    return !wildcardMatches(f, album.getExcludedWildcard());
-                }
-                return false;
-            }
-        });
-
-        if (files != null) {
-            for (File f : files) {
-                try {
-                    photoService.getPhoto(new PhotoKey(key, f.getName()), 1);
-                } catch (JAXBException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (ExecutionException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (TimeoutException e) {
-                    //e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                //addImage(album, f);
-                //System.out.println(f);
-            }
-            for (File f : files) {
-                try {
-                    album.getItems().add(photoService.getPhoto(new PhotoKey(key, f.getName())));
-                } catch (JAXBException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (ExecutionException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                //addImage(album, f);
-                //System.out.println(f);
-            }
+    private void load(PhotoAlbum album, PhotoAlbumKey key, File configFile) {
+        try {
+            queue.waitFuture(new ReadPhotosTask(queue, key, album, configFile));
+        } catch (ExecutionException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-    }
-
-    private static boolean wildcardMatches(File f, @Nullable String wildcards) {
-        if (StringUtils.isNotBlank(wildcards)) {
-            //noinspection ConstantConditions
-            for (String wildcard : wildcards.split("[ ,;]")) {
-                if (FilenameUtils.wildcardMatch(f.getName(), wildcard, IOCase.INSENSITIVE)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void save(PhotoAlbum album, File configFile) throws JAXBException {

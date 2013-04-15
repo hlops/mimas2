@@ -56,4 +56,10 @@ public class PhotoKey implements EntityKey {
     public File getFile() {
         return new File(album.getFile(), name);
     }
+
+    @Override
+    public String toString() {
+        return "PhotoKey: " + album.getFile().getName() + "/" + name;
+    }
+
 }

@@ -10,8 +10,6 @@ import com.hlops.mimas.service.photo.PhotoService;
 
 import javax.xml.bind.JAXBException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,14 +25,11 @@ public class PhotoServiceImpl implements PhotoService {
 
     // todo - handle exceptions
     public PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException, ExecutionException, InterruptedException {
-        return queue.getFuture(new CreatePhotoAlbumTask(key, this)).get();
+        return queue.getFuture(new CreatePhotoAlbumTask(key, queue)).get();
     }
 
     public Photo getPhoto(PhotoKey key) throws JAXBException, ExecutionException, InterruptedException {
         return queue.getFuture(new CreatePhotoTask(key)).get();
     }
 
-    public Photo getPhoto(PhotoKey key, int timeout) throws JAXBException, ExecutionException, InterruptedException, TimeoutException {
-        return queue.getFuture(new CreatePhotoTask(key)).get(timeout, TimeUnit.MILLISECONDS);
-    }
 }

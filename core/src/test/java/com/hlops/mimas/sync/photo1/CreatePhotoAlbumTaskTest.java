@@ -47,13 +47,12 @@ public class CreatePhotoAlbumTaskTest extends Assert {
     @Test
     public void testGetAlbum() throws Exception {
 
-        File path = new File("core/src/test/resources/foto/2");
-        PhotoAlbumKey albumKey = new PhotoAlbumKey(path);
-
         TestThread[] threads = new TestThread[20];
 
         ThreadGroup threadGroup = new ThreadGroup("test");
         for (int i = 0; i < threads.length; i++) {
+            File path = new File("core/src/test/resources/foto/" + ((i % 5) + 1));
+            PhotoAlbumKey albumKey = new PhotoAlbumKey(path);
             threads[i] = new TestThread(threadGroup, "thread#" + i, albumKey);
         }
 

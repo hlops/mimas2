@@ -1,6 +1,8 @@
 package com.hlops.mimas.sync;
 
 import com.hlops.mimas.data.EntityKey;
+import com.hlops.mimas.data.KeyProvider;
+import com.hlops.mimas.data.TaskKey;
 
 import java.util.concurrent.Callable;
 
@@ -10,8 +12,6 @@ import java.util.concurrent.Callable;
  * Date: 1/30/13
  * Time: 4:43 PM
  */
-public interface CallableTask<Key extends EntityKey, T> extends Callable<T> {
-
-    Key getKey();
+public interface CallableTask<T> extends Callable<T>, AbstractTask {
 
 }
