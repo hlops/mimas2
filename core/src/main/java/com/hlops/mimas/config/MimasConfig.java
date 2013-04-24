@@ -27,8 +27,8 @@ public class MimasConfig extends VersionConfig {
     @XmlElement(required = true)
     private PhotoConfig photoConfig = new PhotoConfig();
 
-    @XmlElement(required = true)
-    private int queueExecutors = 10;
+    @XmlElement(required = true, defaultValue = "4")
+    private int queueExecutors = 4;
 
 
     @XmlTransient

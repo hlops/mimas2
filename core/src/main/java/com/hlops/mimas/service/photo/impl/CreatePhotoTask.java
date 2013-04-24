@@ -5,6 +5,8 @@ import com.hlops.mimas.data.bean.photo.ImageSize;
 import com.hlops.mimas.data.bean.photo.Photo;
 import com.hlops.mimas.data.key.photo.PhotoKey;
 import com.hlops.mimas.sync.CallableTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,8 @@ import java.io.IOException;
  */
 class CreatePhotoTask implements CallableTask<Photo> {
 
+    private static Logger logger = LoggerFactory.getLogger(CreatePhotoTask.class);
+
     private final PhotoKey key;
     private final TaskKey taskKey;
 
@@ -32,11 +36,9 @@ class CreatePhotoTask implements CallableTask<Photo> {
     }
 
     private Photo getPhoto(PhotoKey key) throws IOException {
-        System.out.println(key);
+        logger.debug("CreatePhotoTask.getPhoto {}", key.getFile().getName());
         BufferedImage image = ImageIO.read(key.getFile());
-        Photo foto = new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()));
-        System.out.println(key.getFile() + " done");
-        return foto;
+        return new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()));
     }
 
     public Photo call() throws Exception {

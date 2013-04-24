@@ -18,5 +18,9 @@ public interface QueueService {
     <T> Future<T> getFuture(CallableTask<T> callableTask);
 
     void waitFuture(RunnableTask callableTask) throws ExecutionException, InterruptedException;
+
+    void incrementPoolSize();
+
+    void decrementPoolSize();
 }
 

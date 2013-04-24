@@ -36,7 +36,7 @@ public class CreatePhotoAlbumTaskTest extends Assert {
         @Override
         public void run() {
             try {
-                System.out.println(photoService.getAlbum(albumKey));
+                System.out.println("loaded album " + photoService.getAlbum(albumKey).getName());
             } catch (Exception e) {
                 e.printStackTrace();
                 fail();

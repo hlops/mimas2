@@ -49,6 +49,6 @@ public class PhotoAlbumKey implements EntityKey {
 
     @Override
     public String toString() {
-        return "PhotoAlbumKey: "+file.getName();
+        return file.getName();
     }
 }

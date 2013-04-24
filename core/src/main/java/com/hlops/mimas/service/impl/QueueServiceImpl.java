@@ -8,6 +8,8 @@ import com.hlops.mimas.service.QueueService;
 import com.hlops.mimas.sync.AbstractTask;
 import com.hlops.mimas.sync.CallableTask;
 import com.hlops.mimas.sync.RunnableTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,22 +27,24 @@ public class QueueServiceImpl implements QueueService {
     private final ConcurrentHashMap<EntityKey, Future> syncMap = new ConcurrentHashMap<EntityKey, Future>();
     private final AtomicInteger poolSize = new AtomicInteger();
 
+    private static Logger logger = LoggerFactory.getLogger(QueueService.class);
+
     public QueueServiceImpl() {
         poolSize.set(MimasConfig.getInstance().getQueueExecutors());
-        // poolSize.set(50);
         threadExecutor = new ThreadPoolExecutor(poolSize.intValue(), poolSize.intValue(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()) {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {
                 super.beforeExecute(t, r);
+                logger.debug("before executing thread {} runnable {}", t, r);
             }
 
             @Override
             protected void afterExecute(Runnable r, Throwable t) {
                 super.afterExecute(r, t);
                 KeyFutureTask task = (KeyFutureTask) r;
-                System.out.println("remove " + syncMap.remove(task.getKey()));
+                logger.debug("after executing runnable {}, Throwable {}", r, t);
                 if (task.isWaitingTask) {
-                    applyPoolSize(poolSize.decrementAndGet());
+                    applyPoolSize(poolSize.decrementAndGet(), false);
                 }
             }
         };
@@ -50,6 +54,7 @@ public class QueueServiceImpl implements QueueService {
         EntityKey key = callableTask.getKey();
         @SuppressWarnings("unchecked") Future<T> result = syncMap.get(key);
         if (result != null) {
+            logger.debug("getFuture already exists ({})", callableTask.getKey());
             return result;
         }
 
@@ -59,6 +64,7 @@ public class QueueServiceImpl implements QueueService {
         if (result == null) {
             threadExecutor.execute(newFuture);
             result = newFuture;
+            logger.debug("getFuture was added to queue ({})", callableTask.getKey());
         }
         return result;
     }
@@ -71,20 +77,32 @@ public class QueueServiceImpl implements QueueService {
             //noinspection unchecked
             result = syncMap.putIfAbsent(key, newFuture);
             if (result == null) {
-                applyPoolSize(poolSize.incrementAndGet());
+                applyPoolSize(poolSize.incrementAndGet(), true);
                 threadExecutor.execute(newFuture);
                 result = newFuture;
+                logger.debug("waitFuture was added to queue ({})", runnableTask.getKey());
             }
         }
-        System.out.println("waiting");
         result.get();
     }
 
-    private synchronized void applyPoolSize(int n) {
-        if (n > threadExecutor.getCorePoolSize()) {
+    @Override
+    public void incrementPoolSize() {
+        applyPoolSize(poolSize.incrementAndGet(), true);
+    }
+
+    @Override
+    public void decrementPoolSize() {
+        applyPoolSize(poolSize.decrementAndGet(), false);
+    }
+
+    private synchronized void applyPoolSize(int n, boolean isIncrementing) {
+        if ((isIncrementing && n > threadExecutor.getCorePoolSize()) || (!isIncrementing && n < threadExecutor.getCorePoolSize())) {
             threadExecutor.setCorePoolSize(n);
             threadExecutor.setMaximumPoolSize(n);
-            System.out.println("applyPoolSize: " + n + " " + threadExecutor.getCorePoolSize() + " " + threadExecutor.getActiveCount() + " " + threadExecutor.prestartAllCoreThreads());
+            logger.debug("applyPoolSize {} {}", threadExecutor.getCorePoolSize(), n);
+        } else {
+            logger.debug("not applyPoolSize {} {} {}", new Object[]{threadExecutor.getCorePoolSize(), n, isIncrementing});
         }
     }
 
@@ -119,6 +137,11 @@ public class QueueServiceImpl implements QueueService {
 
         public boolean isWaitingTask() {
             return isWaitingTask;
+        }
+
+        @Override
+        public String toString() {
+            return key.toString();
         }
     }
 }

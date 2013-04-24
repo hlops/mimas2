@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:element name="foto" type="photoConfig"/>
+  <xs:element name="mimas" type="mimasConfig"/>
 
-    <xs:element name="mimas" type="mimasConfig"/>
+  <xs:element name="photo" type="photoConfig"/>
 
-    <xs:element name="version" type="version"/>
+  <xs:element name="version" type="version"/>
 
-    <xs:complexType name="mimasConfig">
-        <xs:complexContent>
-            <xs:extension base="versionConfig">
-                <xs:sequence>
-                    <xs:element name="dateFormat" type="xs:string"/>
-                    <xs:element name="defaultMimasFolder" type="xs:string"/>
-                    <xs:element name="photoConfig" type="photoConfig"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="versionConfig" abstract="true">
+  <xs:complexType name="mimasConfig">
+    <xs:complexContent>
+      <xs:extension base="versionConfig">
         <xs:sequence>
-            <xs:element ref="version"/>
+          <xs:element name="dateFormat" type="xs:string"/>
+          <xs:element name="defaultMimasFolder" type="xs:string"/>
+          <xs:element name="photoConfig" type="photoConfig"/>
+          <xs:element name="queueExecutors" type="xs:int"/>
         </xs:sequence>
-    </xs:complexType>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:complexType name="photoConfig">
-        <xs:complexContent>
-            <xs:extension base="versionConfig">
-                <xs:sequence/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:complexType name="versionConfig" abstract="true">
+    <xs:sequence>
+      <xs:element ref="version"/>
+      <xs:element name="recreateConfig" type="xs:boolean" default="false" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 
-    <xs:simpleType name="version">
-        <xs:restriction base="xs:string"/>
-    </xs:simpleType>
+  <xs:complexType name="photoConfig">
+    <xs:complexContent>
+      <xs:extension base="versionConfig">
+        <xs:sequence>
+          <xs:element name="includedWildcard" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="version">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
 </xs:schema>

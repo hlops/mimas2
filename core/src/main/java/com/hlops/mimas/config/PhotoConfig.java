@@ -16,8 +16,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PhotoConfig extends VersionConfig {
 
     private String includedWildcard = "*.jpg,*.jpeg,*.gif,*.png";
+    private String configName = "foto.xml";
 
     public String getIncludedWildcard() {
         return includedWildcard;
+    }
+
+    public String getConfigName() {
+        return configName;
     }
 }

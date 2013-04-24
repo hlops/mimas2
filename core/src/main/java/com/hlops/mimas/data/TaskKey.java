@@ -39,4 +39,9 @@ public class TaskKey implements EntityKey {
         result = 31 * result + albumKey.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return taskClass.getSimpleName() + ":" + albumKey;
+    }
 }

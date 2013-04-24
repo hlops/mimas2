@@ -6,5 +6,7 @@
     <defaultMimasFolder>.mimas</defaultMimasFolder>
     <photoConfig>
         <version>1.0.1</version>
+        <recreateConfig>true</recreateConfig>
     </photoConfig>
+    <queueExecutors>4</queueExecutors>
 </mimas>

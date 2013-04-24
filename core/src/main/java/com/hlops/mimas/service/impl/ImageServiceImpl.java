@@ -1,8 +1,11 @@
 package com.hlops.mimas.service.impl;
 
 import com.hlops.mimas.service.ImageService;
+import com.hlops.mimas.service.QueueService;
 import com.hlops.mimas.service.Size;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +23,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class ImageServiceImpl implements ImageService {
+
+    private static Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     @NotNull
     public Size getScale(@NotNull Size from, @NotNull Size to) {
