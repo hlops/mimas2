@@ -10,6 +10,8 @@ import com.hlops.mimas.service.impl.CacheServiceImpl;
 import com.hlops.mimas.service.impl.ImageServiceImpl;
 import com.hlops.mimas.service.photo.impl.PhotoServiceImpl;
 import com.hlops.mimas.service.impl.QueueServiceImpl;
+import com.hlops.mimas.service.tv.TVService;
+import com.hlops.mimas.service.tv.impl.TVServiceImpl;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,5 +29,7 @@ public class ServiceModule extends AbstractModule {
 
         bind(CacheService.class).to(CacheServiceImpl.class).in(Scopes.SINGLETON);
         bind(QueueService.class).to(QueueServiceImpl.class).in(Scopes.SINGLETON);
+
+        bind(TVService.class).to(TVServiceImpl.class).in(Scopes.SINGLETON);
     }
 }

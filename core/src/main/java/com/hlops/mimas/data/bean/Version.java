@@ -29,7 +29,7 @@ public class Version implements Comparable<Version> {
 
     @XmlValue()
     public String getVersion() {
-        return major + "." + minor + "." + patch;
+        return toString();
     }
 
     public void setVersion(String version) {
@@ -63,5 +63,10 @@ public class Version implements Comparable<Version> {
             n = Integer.compare(v.patch, patch);
         }
         return n;
+    }
+
+    @Override
+    public String toString() {
+        return major + "." + minor + "." + patch;
     }
 }
