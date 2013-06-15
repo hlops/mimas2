@@ -1,49 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Mimas Application</title>
-  <style>body { font-family: sans-serif; }</style>
-  <script src="js/vendor/require-2.1.5.js"></script>
-  <script>
-  // Configure the AMD module loader
-  requirejs.config({
-    // The path where your JavaScripts are located
-    baseUrl: './js/',
-    // Specify the paths of vendor libraries
-    paths: {
-      jquery: 'vendor/jquery-1.9.1',
-      underscore: 'vendor/lodash-1.2.0',
-      backbone: 'vendor/backbone-1.0.0',
-      handlebars: 'vendor/handlebars-1.0.rc.4',
-      text: 'vendor/require-text-2.0.6',
-      chaplin: 'vendor/chaplin-0.9.0'
-    },
-    // Underscore and Backbone are not AMD-capable per default,
-    // so we need to use the AMD wrapping of RequireJS
-    shim: {
-      underscore: {
-        exports: '_'
-      },
-      backbone: {
-        deps: ['underscore', 'jquery'],
-        exports: 'Backbone'
-      },
-      handlebars: {
-        exports: 'Handlebars'
-      }
-    }
-    // For easier development, disable browser caching
-    // Of course, this should be removed in a production environment
-    //, urlArgs: 'bust=' +  (new Date()).getTime()
-	, urlArgs: 'bust=' +  (new Date()).getTime()
-  });
+    <meta charset="utf-8">
+    <title>Mimas Application</title>
 
-  // Bootstrap the application
-  require(['application'], function(Application) {
-    (new Application).initialize();
-  });
-  </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <script src="js/vendor/require-2.1.5.js"></script>
+    <script>
+        // Configure the AMD module loader
+        requirejs.config({
+            // The path where your JavaScripts are located
+            baseUrl:'./js/',
+            // Specify the paths of vendor libraries
+            paths:{
+                jquery:'vendor/jquery-1.9.1',
+                underscore:'vendor/lodash-1.2.0',
+                backbone:'vendor/backbone-1.0.0',
+                handlebars:'vendor/handlebars-1.0.rc.4',
+                text:'vendor/require-text-2.0.6',
+                webshims:'vendor/webshims/polyfiller',
+                bootstrap:'vendor/bootstrap/bootstrap.min',
+                chaplin:'vendor/chaplin-0.9.0'
+            },
+            // Underscore and Backbone are not AMD-capable per default,
+            // so we need to use the AMD wrapping of RequireJS
+            shim:{
+                underscore:{
+                    exports:'_'
+                },
+                backbone:{
+                    deps:['underscore', 'jquery'],
+                    exports:'Backbone'
+                },
+                handlebars:{
+                    exports:'Handlebars'
+                }
+            }
+            // For easier development, disable browser caching
+            // Of course, this should be removed in a production environment
+            //, urlArgs: 'bust=' +  (new Date()).getTime()
+            , urlArgs:'bust=' + (new Date()).getTime()
+        });
+
+        // Bootstrap the application
+        require(['application'], function (Application) {
+            (new Application).initialize();
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $.getJSON("test.json",
+                    function (data) {
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                var value = data[key];
+                                var n = key.indexOf("@");
+                                if (n > 0) {
+                                    $(key.substring(0, n)).attr(key.substring(n + 1), value);
+                                } else {
+                                    $(key).text(value);
+                                }
+                            }
+                        }
+                    }
+            )
+        })
+    </script>
+
 </head>
-<body></body>
+<body>
+</body>
 </html>
