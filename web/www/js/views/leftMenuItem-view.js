@@ -1,6 +1,6 @@
 define([
     'views/base/view',
-    'text!templates/projectItem.hbs'
+    'text!templates/leftMenuItem.hbs'
 ], function (View, template) {
     'use strict';
 

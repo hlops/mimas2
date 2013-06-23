@@ -1,11 +1,11 @@
 define([
     'views/base/collection-view',
-    'text!templates/projectsCollection.hbs',
-    'views/projectItem-view'
+    'text!templates/leftMenu.hbs',
+    'views/leftMenuItem-view'
 ], function (CollectionView, template, ItemView) {
     'use strict';
 
-    var ProjectsView = CollectionView.extend({
+    var MenuView = CollectionView.extend({
         // Automatically render after initialize
         itemView:ItemView,
         autoRender:true,
@@ -13,8 +13,8 @@ define([
         className:'projects-view',
         id:"divProjects",
 
-        region:'right',
-        listSelector: "#projectsCollection",
+        region:'left',
+        //listSelector: "#menuCollection",
 
         // Save the template string in a prototype property.
         // This is overwritten with the compiled template function.
@@ -22,5 +22,5 @@ define([
         template:template
     });
 
-    return ProjectsView;
+    return MenuView;
 });

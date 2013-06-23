@@ -4,15 +4,12 @@ define([
 ], function (Chaplin, Model) {
     'use strict';
 
-    var Mimas = Model.extend({
-        defaults:{
-        }
-
+    var Project = Model.extend({
         // ,initialize: function(attributes, options) {
         //  Model.prototype.initialize.apply(this, arguments);
-        //  console.debug('HelloWorld#initialize');
+        //  console.debug('Project#initialize');
         // }
     });
 
-    return Mimas;
+    return Project;
 });
