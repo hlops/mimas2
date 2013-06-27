@@ -12,7 +12,9 @@ define([
     var ProjectsController = Controller.extend({
         show:function (params) {
             this.model = new Projects();
+            this.model.fetch();
 
+/*
             var menuCollection = new LeftMenuCollection();
             this.model.menu = menuCollection;
             menuCollection.add(new LeftMenuItem({}));
@@ -47,6 +49,7 @@ define([
             projectCollection.add(new Project({}))
             projectCollection.add(new Project({}))
 
+*/
             this.view = new ProjectsView({model:this.model});
         }
     });
