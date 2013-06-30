@@ -12,6 +12,13 @@ define([
     var ProjectsController = Controller.extend({
         show:function (params) {
             this.model = new Projects();
+            var m = this.model;
+            var ctlr = this;
+            this.model.on("change", function() {
+                alert(JSON.stringify(this))
+                ctlr.view = new ProjectsView({model:this.model});
+                v.render() ;
+            });
             this.model.fetch();
 
 /*
@@ -50,8 +57,7 @@ define([
             projectCollection.add(new Project({}))
 
 */
-            this.view = new ProjectsView({model:this.model});
-        }
+       }
     });
 
     return ProjectsController;

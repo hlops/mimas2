@@ -7,7 +7,10 @@ import com.hlops.mimas.model.leftMenu.MenuItemBean;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuView;
 
+import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +22,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ProjectsBean extends ModelBean {
 
+    @XmlList
+    private List<ProjectBean> projects;
+
     public ProjectsBean() {
+        projects = new ArrayList<ProjectBean>();
+        projects.add(new ProjectBean("project1"));
+        projects.add(new ProjectBean("project2"));
+        projects.add(new ProjectBean("project3"));
+        projects.add(new ProjectBean("project4"));
+        projects.add(new ProjectBean("project5"));
+    }
+
+    public List<ProjectBean> getProjects() {
+        return projects;
     }
 
     @Override
@@ -27,11 +43,6 @@ public class ProjectsBean extends ModelBean {
         LeftMenuBean leftMenuBean = new LeftMenuBean();
         leftMenuBean.getItems().add(new LeftMenuOrder());
         leftMenuBean.getItems().add(new LeftMenuView());
-        leftMenuBean.getItems().add(new MenuItemBean("project1"));
-        leftMenuBean.getItems().add(new MenuItemBean("project2"));
-        leftMenuBean.getItems().add(new MenuItemBean("project3"));
-        leftMenuBean.getItems().add(new MenuItemBean("project4"));
-        leftMenuBean.getItems().add(new MenuItemBean("project5"));
         return leftMenuBean;
     }
 }

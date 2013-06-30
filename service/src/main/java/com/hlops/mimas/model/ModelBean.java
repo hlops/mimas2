@@ -11,14 +11,14 @@ import com.hlops.mimas.model.leftMenu.LeftMenuBean;
  */
 public abstract class ModelBean {
 
-    private LeftMenuBean leftMenuBean;
+    private LeftMenuBean menu;
 
     protected ModelBean() {
-        this.leftMenuBean = createLeftMenu();
+        this.menu = createLeftMenu();
     }
 
-    public LeftMenuBean getLeftMenuBean() {
-        return leftMenuBean;
+    public LeftMenuBean getMenu() {
+        return menu;
     }
 
     protected abstract LeftMenuBean createLeftMenu();
