@@ -1,14 +1,15 @@
 define([
+    'chaplin',
     'views/base/view',
     'text!templates/projects.hbs',
     'views/leftMenu-view',
     'views/projectsCollection-view'
-], function (View, template, LeftMenuView, ProjectsCollectionView) {
+], function (Chaplin, View, template, LeftMenuView, ProjectsCollectionView) {
     'use strict';
 
     var ProjectView = View.extend({
         // Automatically render after initialize
-        autoRender:true,
+        autoRender:false,
         id:"projects",
         region:'main',
         regions:{
@@ -22,9 +23,12 @@ define([
         template:template,
 
         render:function () {
+            //alert(this.model)
+            //alert(this.model.get("projects") instanceof Chaplin.Collection)
+            //alert(this.model.get("projects") instanceof Array)
             View.prototype.render.apply(this, arguments);
-            this.subview('leftMenu', new LeftMenuView({collection:this.model.menu, container:this.el}));
-            this.subview('projectCollection', new ProjectsCollectionView({collection:this.model.projects, container:this.el}));
+            //this.subview('leftMenu', new LeftMenuView({collection:this.model, container:this.el}));
+            this.subview('projectCollection', new ProjectsCollectionView({collection:this.model.get("projects"), container:this.el}));
         }
     });
 

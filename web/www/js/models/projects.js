@@ -1,15 +1,23 @@
 define([
     'chaplin',
-    'models/base/model'
-], function (Chaplin, Model) {
+    'models/base/model',
+    'models/base/collection',
+    'models/projectItem'
+], function (Chaplin, Model, Collection, Item) {
     'use strict';
 
+    var Projects = Collection.extend({
+        model:Item
+        ,initialize: function(attributes, options) {
+        }
+    });
+
     var Project = Model.extend({
-        url:"rest/projects"
-        // ,initialize: function(attributes, options) {
-        //  Model.prototype.initialize.apply(this, arguments);
-        //  console.debug('Project#initialize');
-        // }
+        url:"rest/projects",
+        collection: Projects,
+        parse: function (data) {
+            this.set("projects", new Projects(data.projects))
+        }
     });
 
     return Project;

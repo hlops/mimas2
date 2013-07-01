@@ -24,6 +24,14 @@
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.8.3" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.8.3" />
           <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/annotations.jar" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.0.7" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.0.7" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.6" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: com.google.inject:guice:3.0" />
+          <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="service/web/Web" />

@@ -20,6 +20,7 @@ define([
         // This is overwritten with the compiled template function.
         // In the end you might want to used precompiled templates.
         template:template
+
     });
 
     return ProjectsView;

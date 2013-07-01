@@ -9,10 +9,10 @@ define([
             name:"Test"
         }
 
-        // ,initialize: function(attributes, options) {
+         ,initialize: function(attributes, options) {
         //  Model.prototype.initialize.apply(this, arguments);
         //  console.debug('Project#initialize');
-        // }
+         }
     });
 
     return Project;
