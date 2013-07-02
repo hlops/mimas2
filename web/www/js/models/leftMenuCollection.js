@@ -5,17 +5,10 @@ define([
 ], function (Chaplin, Collection, Project) {
     'use strict';
 
-    var Projects = Collection.extend({
+    var MenuItem = Model.extend({
+    });
 
-        collection:new Collection(),
-
-        initialize:function (attributes, options) {
-        }
-
-        // ,initialize: function(attributes, options) {
-        //  Collection.prototype.initialize.apply(this, arguments);
-        //  console.debug('Projects#initialize');
-        // }
+    var Menu = Collection.extend({
     });
 
     return Projects;

@@ -1,14 +1,44 @@
 define([
     'chaplin',
     'views/base/view',
-    'text!templates/projects.hbs',
-    'views/leftMenu-view',
-    'views/projectsCollection-view'
-], function (Chaplin, View, template, LeftMenuView, ProjectsCollectionView) {
+    'views/base/collection-view',
+    'text!templates/projects/projects.hbs',
+    'text!templates/projects/projectsCollection.hbs',
+    'text!templates/projects/projectItem.hbs',
+    'views/leftMenu-view'
+], function (Chaplin, View, CollectionView, projectContainerTemplate, projectsTemplate, projectItemTemplate, LeftMenuView) {
     'use strict';
 
-    var ProjectView = View.extend({
+    var ProjectItemView = View.extend({
         // Automatically render after initialize
+        autoRender:true,
+        className:'projectItem-view',
+
+        // Save the template string in a prototype property.
+        // This is overwritten with the compiled template function.
+        // In the end you might want to used precompiled templates.
+        template:projectItemTemplate
+    });
+
+    var ProjectsCollectionView = CollectionView.extend({
+        // Automatically render after initialize
+        itemView:ProjectItemView,
+        autoRender:true,
+
+        className:'projects-view',
+        id:"divProjects",
+
+        region:'right',
+        listSelector: "#projectsCollection",
+
+        // Save the template string in a prototype property.
+        // This is overwritten with the compiled template function.
+        // In the end you might want to used precompiled templates.
+        template:projectsTemplate
+
+    });
+
+    var ProjectView = View.extend({
         autoRender:false,
         id:"projects",
         region:'main',
@@ -16,18 +46,11 @@ define([
             '#projectsContainerLeft':'left',
             '#projectsContainerRight':'right'
         },
-
-        // Save the template string in a prototype property.
-        // This is overwritten with the compiled template function.
-        // In the end you might want to used precompiled templates.
-        template:template,
+        template:projectContainerTemplate,
 
         render:function () {
-            //alert(this.model)
-            //alert(this.model.get("projects") instanceof Chaplin.Collection)
-            //alert(this.model.get("projects") instanceof Array)
             View.prototype.render.apply(this, arguments);
-            //this.subview('leftMenu', new LeftMenuView({collection:this.model, container:this.el}));
+            this.subview('leftMenu', new LeftMenuView({collection:this.model.get("leftMenu"), container:this.el}));
             this.subview('projectCollection', new ProjectsCollectionView({collection:this.model.get("projects"), container:this.el}));
         }
     });

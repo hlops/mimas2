@@ -7,7 +7,7 @@ package com.hlops.mimas.model.leftMenu;
  * Time: 19:11
  * To change this template use File | Settings | File Templates.
  */
-public class MenuItemBean extends AbsractMenuItemBean {
+public class MenuItemBean {
 
     private String id;
 
