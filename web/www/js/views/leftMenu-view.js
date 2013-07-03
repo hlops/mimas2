@@ -1,26 +1,21 @@
 define([
+    'lib/view-helper',
+    'views/base/view',
     'views/base/collection-view',
-    'text!templates/leftMenu.hbs',
-    'views/leftMenuItem-view'
-], function (CollectionView, template, ItemView) {
+    'text!templates/menu/leftMenuItem.hbs',
+    'text!templates/menu/leftMenu.hbs'
+], function (Helper, View, CollectionView, itemTemplate, template) {
     'use strict';
 
-    var MenuView = CollectionView.extend({
-        // Automatically render after initialize
-        itemView:ItemView,
+    var ItemView = View.extend({
         autoRender:true,
-
-        className:'projects-view',
-        id:"divProjects",
-
-        region:'left',
-        //listSelector: "#menuCollection",
-
-        // Save the template string in a prototype property.
-        // This is overwritten with the compiled template function.
-        // In the end you might want to used precompiled templates.
-        template:template
+        template:itemTemplate
     });
 
-    return MenuView;
+    return CollectionView.extend({
+        itemView:ItemView,
+        autoRender:true,
+        region:'left',
+        template:template
+    });
 });

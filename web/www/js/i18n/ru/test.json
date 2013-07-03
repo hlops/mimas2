@@ -1,0 +1,14 @@
+{
+    "head>title":"Mimas",
+    "#i18n_loggedAs": "Вы вошли как: ",
+    "#i18n_query@placeholder": "что ищем?",
+    "#i18n_queryButton": "Поиск",
+
+    "#i18n_options>li:eq(0)": "Настройки отображения",
+    "#i18n_options>li:eq(1)>a": "Черепица",
+    "#i18n_options>li:eq(2)>a": "Список",
+
+    "#i18n_sortOrder>li:eq(0)": "Сортировка",
+    "#i18n_sortOrder>li:eq(1)>a": "По алфавиту",
+    "#i18n_sortOrder>li:eq(2)>a": "По дате"
+}

@@ -10,11 +10,11 @@ import com.hlops.mimas.model.leftMenu.MenuItemBean;
  * Time: 0:39
  * To change this template use File | Settings | File Templates.
  */
-public class LeftMenuOrder extends MenuGroupBean{
+public class LeftMenuOrder extends MenuGroupBean {
 
     public LeftMenuOrder() {
         super("leftMenuOrderBy");
-        getItems().add(new MenuItemBean(getId()+"Abc"));
-        getItems().add(new MenuItemBean(getId()+"Date"));
+        getItems().add(new MenuItemBean(getId() + "Abc"));
+        getItems().add(new MenuItemBean(getId() + "Date"));
     }
 }

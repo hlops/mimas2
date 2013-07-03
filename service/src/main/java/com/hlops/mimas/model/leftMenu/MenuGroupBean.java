@@ -12,7 +12,25 @@ import java.util.List;
  */
 public class MenuGroupBean extends MenuItemBean {
 
-    private List<MenuItemBean> items = new ArrayList<MenuItemBean>();
+    private String selected;
+    private List<MenuItemBean> items = new ArrayList<MenuItemBean>() {
+        @Override
+        public boolean add(MenuItemBean menuItemBean) {
+            final boolean add = super.add(menuItemBean);
+            if (selected == null) {
+                selected = menuItemBean.getId();
+            }
+            return add;
+        }
+
+        @Override
+        public void add(int index, MenuItemBean element) {
+            super.add(index, element);
+            if (selected == null) {
+                selected = element.getId();
+            }
+        }
+    };
 
     public MenuGroupBean(String id) {
         super(id);
@@ -22,4 +40,11 @@ public class MenuGroupBean extends MenuItemBean {
         return items;
     }
 
+    public String getSelected() {
+        return selected;
+    }
+
+    public void setSelected(String selected) {
+        this.selected = selected;
+    }
 }
