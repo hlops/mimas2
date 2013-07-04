@@ -13,7 +13,7 @@ import com.hlops.mimas.model.leftMenu.MenuItemBean;
 public class LeftMenuView extends MenuGroupBean {
 
     public LeftMenuView() {
-        super("leftMenuOrderView");
+        super("leftMenuView");
         getItems().add(new MenuItemBean(getId() + "Tile"));
         getItems().add(new MenuItemBean(getId() + "List"));
         getItems().add(new MenuItemBean(getId() + "Details"));

@@ -18,7 +18,6 @@ import java.util.List;
  * Time: 1:27
  * To change this template use File | Settings | File Templates.
  */
-@XmlRootElement
 public class ProjectsBean extends ModelBean {
 
     @XmlList

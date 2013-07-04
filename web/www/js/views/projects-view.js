@@ -10,34 +10,21 @@ define([
     'use strict';
 
     var ProjectItemView = View.extend({
-        // Automatically render after initialize
-        autoRender:true,
         className:'projectItem-view',
-
-        // Save the template string in a prototype property.
-        // This is overwritten with the compiled template function.
-        // In the end you might want to used precompiled templates.
         template:projectItemTemplate
     });
 
     var ProjectsCollectionView = CollectionView.extend({
-        // Automatically render after initialize
-        itemView:ProjectItemView,
-        autoRender:true,
-
-        className:'projects-view',
         id:"divProjects",
-
+        className:'projects-view',
+        template:projectsTemplate,
         region:'right',
-        listSelector: "#projectsCollection",
-
-        // Save the template string in a prototype property.
-        // This is overwritten with the compiled template function.
-        // In the end you might want to used precompiled templates.
-        template:projectsTemplate
+        itemView:ProjectItemView,
+        listSelector: "#projectsCollection"
 
     });
 
+    //noinspection UnnecessaryLocalVariableJS
     var ProjectView = View.extend({
         autoRender:false,
         id:"projects",

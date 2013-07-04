@@ -1,14 +1,13 @@
 define(['views/base/view', 'text!templates/site.hbs'], function (View, template) {
     'use strict';
 
-    var SiteView = View.extend({
+    return View.extend({
         container:'body',
         id:'site-container',
         regions:{
             '#main-container':'main'
         },
-        template:template
+        template:template,
+        i18n:"site"
     });
-
-    return SiteView;
 });

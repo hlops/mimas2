@@ -1,0 +1,10 @@
+{
+    "#i18n_leftMenuOrderBy": "Сортировать",
+    "#i18n_leftMenuOrderByAbc": "По алфавиту",
+    "#i18n_leftMenuOrderByDate": "По дате",
+
+    "#i18n_leftMenuView": "Вид",
+    "#i18n_leftMenuViewTile": "Черепица",
+    "#i18n_leftMenuViewList": "Список",
+    "#i18n_leftMenuViewDetails": "Детальный"
+}

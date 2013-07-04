@@ -2,20 +2,18 @@ define([
     'lib/view-helper',
     'views/base/view',
     'views/base/collection-view',
-    'text!templates/menu/leftMenuItem.hbs',
-    'text!templates/menu/leftMenu.hbs'
-], function (Helper, View, CollectionView, itemTemplate, template) {
+    'text!templates/menu/leftMenuItem.hbs'
+], function (Helper, View, CollectionView, itemTemplate, Utils) {
     'use strict';
 
     var ItemView = View.extend({
-        autoRender:true,
         template:itemTemplate
     });
 
     return CollectionView.extend({
         itemView:ItemView,
-        autoRender:true,
         region:'left',
-        template:template
+        className: "affix span2",
+        i18n: "leftMenu"
     });
 });
