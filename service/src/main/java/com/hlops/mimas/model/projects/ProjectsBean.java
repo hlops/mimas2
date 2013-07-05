@@ -1,13 +1,11 @@
 package com.hlops.mimas.model.projects;
 
 import com.hlops.mimas.model.ModelBean;
-import com.hlops.mimas.model.leftMenu.LeftMenuBean;
-import com.hlops.mimas.model.leftMenu.MenuItemBean;
+import com.hlops.mimas.model.leftMenu.MenuBean;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuView;
 
 import javax.xml.bind.annotation.XmlList;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class ProjectsBean extends ModelBean {
     }
 
     @Override
-    protected void createLeftMenu(List<MenuItemBean> leftMenu) {
+    protected void createLeftMenu(List<MenuBean> leftMenu) {
         leftMenu.add(new LeftMenuOrder());
         leftMenu.add(new LeftMenuView());
     }

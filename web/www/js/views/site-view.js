@@ -1,4 +1,7 @@
-define(['views/base/view', 'text!templates/site.hbs'], function (View, template) {
+define([
+    'views/base/view',
+    'text!templates/site.hbs'
+], function (View, template) {
     'use strict';
 
     return View.extend({
@@ -7,7 +10,6 @@ define(['views/base/view', 'text!templates/site.hbs'], function (View, template)
         regions:{
             '#main-container':'main'
         },
-        template:template,
-        i18n:"site"
+        template:template
     });
 });

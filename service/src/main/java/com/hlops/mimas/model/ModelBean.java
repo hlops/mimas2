@@ -1,9 +1,8 @@
 package com.hlops.mimas.model;
 
-import com.hlops.mimas.model.leftMenu.MenuItemBean;
+import com.hlops.mimas.model.leftMenu.MenuBean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,15 +13,24 @@ import java.util.List;
  */
 public abstract class ModelBean {
 
-    private List<MenuItemBean> leftMenu = new ArrayList<MenuItemBean>();
+    private List<MenuBean> leftMenu = new ArrayList<MenuBean>();
+    protected Set<String> i18n = new HashSet<String>();
 
     protected ModelBean() {
+        i18n.add("site");
         createLeftMenu(leftMenu);
+        for (MenuBean bean : leftMenu) {
+            i18n.addAll(Arrays.asList(bean.listI18nTemplates()));
+        }
     }
 
-    public List<MenuItemBean> getLeftMenu() {
+    public List<MenuBean> getLeftMenu() {
         return leftMenu;
     }
 
-    protected abstract void createLeftMenu(List<MenuItemBean> leftMenu);
+    protected abstract void createLeftMenu(List<MenuBean> leftMenu);
+
+    public Set<String> getI18n() {
+        return i18n;
+    }
 }

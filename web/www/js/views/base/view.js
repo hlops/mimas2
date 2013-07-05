@@ -1,9 +1,8 @@
 define([
     'handlebars',
     'chaplin',
-    'lib/utils',
     'lib/view-helper' // Just load the view helpers, no return value
-], function (Handlebars, Chaplin, Utils) {
+], function (Handlebars, Chaplin) {
     'use strict';
 
     var View = Chaplin.View.extend({
@@ -42,12 +41,8 @@ define([
             return templateFunc;
         },
 
-        i18n:[],
         attach: function() {
             Chaplin.View.prototype.attach.apply(this, arguments);
-            if (this.i18n && this.i18n.length) {
-                Utils.i18n(this.i18n.split(" "));
-            }
         }
     });
 

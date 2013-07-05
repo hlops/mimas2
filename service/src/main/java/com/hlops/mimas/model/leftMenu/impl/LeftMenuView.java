@@ -1,5 +1,6 @@
 package com.hlops.mimas.model.leftMenu.impl;
 
+import com.hlops.mimas.model.leftMenu.MenuBean;
 import com.hlops.mimas.model.leftMenu.MenuGroupBean;
 import com.hlops.mimas.model.leftMenu.MenuItemBean;
 
@@ -10,12 +11,17 @@ import com.hlops.mimas.model.leftMenu.MenuItemBean;
  * Time: 0:39
  * To change this template use File | Settings | File Templates.
  */
-public class LeftMenuView extends MenuGroupBean {
+public class LeftMenuView extends MenuGroupBean implements MenuBean {
 
     public LeftMenuView() {
         super("leftMenuView");
         getItems().add(new MenuItemBean(getId() + "Tile"));
         getItems().add(new MenuItemBean(getId() + "List"));
         getItems().add(new MenuItemBean(getId() + "Details"));
+    }
+
+    @Override
+    public String[] listI18nTemplates() {
+        return new String[]{"leftMenu"};
     }
 }

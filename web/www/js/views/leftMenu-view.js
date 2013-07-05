@@ -3,7 +3,7 @@ define([
     'views/base/view',
     'views/base/collection-view',
     'text!templates/menu/leftMenuItem.hbs'
-], function (Helper, View, CollectionView, itemTemplate, Utils) {
+], function (Helper, View, CollectionView, itemTemplate) {
     'use strict';
 
     var ItemView = View.extend({
@@ -13,7 +13,6 @@ define([
     return CollectionView.extend({
         itemView:ItemView,
         region:'left',
-        className: "affix span2",
-        i18n: "leftMenu"
+        className: "affix span2"
     });
 });

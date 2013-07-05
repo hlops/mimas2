@@ -1,8 +1,7 @@
 define([
     'chaplin',
-    'views/base/view',
-    'lib/utils'
-], function (Chaplin, View, Utils) {
+    'views/base/view'
+], function (Chaplin, View) {
     'use strict';
 
     var CollectionView = Chaplin.CollectionView.extend({
@@ -11,12 +10,8 @@ define([
         // so we need to borrow the method from the View prototype:
         getTemplateFunction:View.prototype.getTemplateFunction,
 
-        i18n:[],
         attach: function() {
             View.prototype.attach.apply(this, arguments);
-            if (this.i18n && this.i18n.length) {
-                Utils.i18n(this.i18n.split(" "));
-            }
         }
     });
 

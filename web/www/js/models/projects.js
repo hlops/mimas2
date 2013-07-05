@@ -24,6 +24,7 @@ define([
         parse: function (data) {
             this.set("projects", new Projects(data.projects), {silent: true});
             this.set("leftMenu", new Menu(data.leftMenu), {silent: true});
+            this.set("i18n", data.i18n, {silent: true});
             this.trigger("change");
         }
     });
