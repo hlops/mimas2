@@ -1,7 +1,8 @@
 define([
+    'chaplin',
     'views/base/view',
     'text!templates/site.hbs'
-], function (View, template) {
+], function (Chaplin, View, template) {
     'use strict';
 
     return View.extend({
@@ -13,12 +14,12 @@ define([
         template:template,
 
         events: {
-            "submit #searchForm": "testEvent"
+            "submit #searchForm": "search"
         },
 
-        testEvent: function () {
-            alert(32312);
-            return false
+        search: function () {
+            Chaplin.mediator.publish('search', $("#i18n_query", this.el).val());
+            return false;
         }
     });
 });

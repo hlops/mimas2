@@ -5,6 +5,7 @@ import com.hlops.mimas.model.projects.ProjectsBean;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -19,7 +20,7 @@ public class Project {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ProjectsBean list() {
+    public ProjectsBean list(@QueryParam("query") String query) {
         return new ProjectsBean();
     }
 }

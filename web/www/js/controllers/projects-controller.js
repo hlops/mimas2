@@ -1,9 +1,10 @@
 define([
+    'chaplin',
     'controllers/base/controller',
     'models/projects',
     'views/projects-view',
     'lib/utils'
-], function (Controller, Projects, ProjectsView, Utils) {
+], function (Chaplin, Controller, Projects, ProjectsView, Utils) {
     'use strict';
 
     return Controller.extend({
@@ -39,6 +40,11 @@ define([
                 });
             });
             this.model.fetch();
+
+            Chaplin.mediator.subscribe("search", function (query) {
+                controller.model.fetch({data: {query:query}});
+            });
+
         }
     });
 });
