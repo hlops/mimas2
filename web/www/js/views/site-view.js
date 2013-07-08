@@ -10,6 +10,15 @@ define([
         regions:{
             '#main-container':'main'
         },
-        template:template
+        template:template,
+
+        events: {
+            "submit #searchForm": "testEvent"
+        },
+
+        testEvent: function () {
+            alert(32312);
+            return false
+        }
     });
 });

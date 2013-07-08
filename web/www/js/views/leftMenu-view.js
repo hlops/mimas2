@@ -13,6 +13,14 @@ define([
     return CollectionView.extend({
         itemView:ItemView,
         region:'left',
-        className: "affix span2"
+        className: "affix span2",
+
+        events: {
+            "click a.menuItem": "testEvent"
+        },
+        testEvent: function (e) {
+            alert(e.target.id)
+            return false;
+        }
     });
 });
