@@ -1,9 +1,10 @@
 define([
+    'chaplin',
     'lib/view-helper',
     'views/base/view',
     'views/base/collection-view',
     'text!templates/menu/leftMenuItem.hbs'
-], function (Helper, View, CollectionView, itemTemplate) {
+], function (Chaplin, Helper, View, CollectionView, itemTemplate) {
     'use strict';
 
     var ItemView = View.extend({
@@ -14,12 +15,13 @@ define([
         itemView:ItemView,
         region:'left',
         className: "affix span2",
+        animationDuration: 0,
 
         events: {
-            "click a.menuItem": "testEvent"
+            "click a.menuItem": "menuClick"
         },
-        testEvent: function (e) {
-            alert(e.target.id)
+        menuClick: function (e) {
+            Chaplin.mediator.publish('menuClick', e.target);
             return false;
         }
     });

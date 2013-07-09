@@ -23,11 +23,6 @@ public class ProjectsBean extends ModelBean {
 
     public ProjectsBean() {
         projects = new ArrayList<ProjectItemBean>();
-        projects.add(new ProjectItemBean("project1", "aaa"));
-        projects.add(new ProjectItemBean("project2", "bb"));
-        projects.add(new ProjectItemBean("project3", "cccc"));
-        projects.add(new ProjectItemBean("project4", "ddddddd"));
-        projects.add(new ProjectItemBean("project5", "e ee e eeee!"));
     }
 
     public List<ProjectItemBean> getProjects() {

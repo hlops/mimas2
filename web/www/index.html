@@ -25,6 +25,7 @@
             // Specify the paths of vendor libraries
             paths:{
                 jquery:'vendor/jquery-1.9.1',
+                cookies:'vendor/jquery-cookie',
                 underscore:'vendor/lodash-1.2.0',
                 backbone:'vendor/backbone-1.0.0',
                 handlebars:'vendor/handlebars-1.0.rc.4',
@@ -45,6 +46,9 @@
                 },
                 handlebars:{
                     exports:'Handlebars'
+                },
+                cookies: {
+                    deps:["jquery"]
                 }
             }
             // For easier development, disable browser caching

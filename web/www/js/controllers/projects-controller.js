@@ -1,50 +1,35 @@
 define([
-    'chaplin',
     'controllers/base/controller',
     'models/projects',
     'views/projects-view',
-    'lib/utils'
-], function (Chaplin, Controller, Projects, ProjectsView, Utils) {
+    'cookies'
+], function (Controller, Projects, ProjectsView) {
     'use strict';
 
     return Controller.extend({
+        query: "",
+        menu: "",
+
         show:function (params) {
             this.model = new Projects();
+            this.view = new ProjectsView({model:this.model});
+
+            this.loadModel();
+
             var controller = this;
 
-            var dfd = new $.Deferred();
-            this.model.on("change", function() {
-                var files = controller.model.get("i18n");
-                if (files) {
-                    for (var i = 0; i < files.length; i++) {
-                        files[i] = "json!i18n/ru/" + files[i] + ".json";
-                    }
-                    require(files, function () {
-                        dfd.resolve(arguments);
-                    });
-                } else {
-                    dfd.resolve();
-                }
-                controller.view.render();
-            });
-
-            this.view = new ProjectsView({model:this.model});
-            this.view.on('addedToDOM', function () {
-                dfd.done(function () {
-                    if (arguments.length) {
-                        var arr = arguments[0];
-                        for (var i = 0; i < arr.length; i++) {
-                            Utils.i18n(arr[i]);
-                        }
-                    }
-                });
-            });
-            this.model.fetch();
-
-            Chaplin.mediator.subscribe("search", function (query) {
+            this.subscribeEvent("search", function (query) {
+                controller.query = query;
                 controller.model.fetch({data: {query:query}});
             });
 
+            this.subscribeEvent("menuClick", function (el) {
+                //$.cookie();
+                //alert($(el).attr("item"))
+                var itemId = $(el).attr("item");
+                alert(this.model.get("leftMenu").get("leftMenuView").get("items")[0])
+                controller.model.fetch({data: {query:controller.query, menu: el.id}});
+            });
         }
     });
 });

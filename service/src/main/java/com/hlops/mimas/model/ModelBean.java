@@ -13,11 +13,12 @@ import java.util.*;
  */
 public abstract class ModelBean {
 
-    private List<MenuBean> leftMenu = new ArrayList<MenuBean>();
+    private List<MenuBean> leftMenu = null;
     protected Set<String> i18n = new HashSet<String>();
 
     protected ModelBean() {
         i18n.add("site");
+        leftMenu = new ArrayList<MenuBean>();
         createLeftMenu(leftMenu);
         for (MenuBean bean : leftMenu) {
             i18n.addAll(Arrays.asList(bean.listI18nTemplates()));
