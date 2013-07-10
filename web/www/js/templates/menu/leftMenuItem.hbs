@@ -2,7 +2,7 @@
     <li id="i18n_{{id}}" class="nav-header" item="{{id}}">{{id}}</li>
     {{#each items}}
     <li {{#ifequal id ../selected}} class="active"{{/ifequal}}>
-        <a class="menuItem" id="i18n_{{id}}" href="#" item="{{id}}">{{id}}</a>
+        <a class="menuItem" id="i18n_{{id}}" href="#" item="{{id}}" parentItem="{{../id}}">{{id}}</a>
     </li>
     {{/each}}
 </ul>

@@ -25,9 +25,13 @@ define([
 
             this.subscribeEvent("menuClick", function (el) {
                 //$.cookie();
-                //alert($(el).attr("item"))
                 var itemId = $(el).attr("item");
-                alert(this.model.get("leftMenu").get("leftMenuView").get("items")[0])
+                var parentItemId = $(el).attr("parentItem");
+                var parentItem = this.model.get("leftMenu").get(parentItemId);
+                var menu = _.find(parentItem.get("items"), function(el) {
+                    return el.id === itemId;
+                });
+                alert(menu.id)
                 controller.model.fetch({data: {query:controller.query, menu: el.id}});
             });
         }
