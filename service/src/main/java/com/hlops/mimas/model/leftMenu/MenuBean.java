@@ -10,4 +10,6 @@ package com.hlops.mimas.model.leftMenu;
 public interface MenuBean {
 
     String[] listI18nTemplates();
+
+    String getId();
 }

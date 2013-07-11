@@ -1,6 +1,7 @@
 package com.hlops.mimas.model;
 
 import com.hlops.mimas.model.leftMenu.MenuBean;
+import com.hlops.mimas.utils.CookieProvider;
 
 import java.util.*;
 
@@ -16,10 +17,10 @@ public abstract class ModelBean {
     private List<MenuBean> leftMenu = null;
     protected Set<String> i18n = new HashSet<String>();
 
-    protected ModelBean() {
+    protected ModelBean(CookieProvider cookieProvider) {
         i18n.add("site");
         leftMenu = new ArrayList<MenuBean>();
-        createLeftMenu(leftMenu);
+        createLeftMenu(cookieProvider, leftMenu);
         for (MenuBean bean : leftMenu) {
             i18n.addAll(Arrays.asList(bean.listI18nTemplates()));
         }
@@ -29,7 +30,7 @@ public abstract class ModelBean {
         return leftMenu;
     }
 
-    protected abstract void createLeftMenu(List<MenuBean> leftMenu);
+    protected abstract void createLeftMenu(CookieProvider cookieProvider, List<MenuBean> leftMenu);
 
     public Set<String> getI18n() {
         return i18n;

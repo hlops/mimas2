@@ -1,5 +1,8 @@
 package com.hlops.mimas.model.leftMenu;
 
+import com.hlops.mimas.utils.CookieProvider;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import java.util.List;
 public class MenuGroupBean extends MenuItemBean {
 
     private String selected;
+
     private List<MenuItemBean> items = new ArrayList<MenuItemBean>() {
         @Override
         public boolean add(MenuItemBean menuItemBean) {
@@ -33,18 +37,27 @@ public class MenuGroupBean extends MenuItemBean {
     };
 
     public MenuGroupBean(String id) {
+        this(id, null);
+    }
+
+    public MenuGroupBean(String id, @Nullable CookieProvider cookieProvider) {
         super(id);
+        if (cookieProvider != null) {
+            selected = cookieProvider.getCookieValue(id);
+        }
     }
 
     public List<MenuItemBean> getItems() {
         return items;
     }
 
+    @Nullable
     public String getSelected() {
         return selected;
     }
 
-    public void setSelected(String selected) {
+    public void setSelected(@Nullable String selected) {
         this.selected = selected;
     }
+
 }

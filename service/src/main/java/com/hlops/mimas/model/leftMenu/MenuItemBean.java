@@ -9,7 +9,7 @@ package com.hlops.mimas.model.leftMenu;
  */
 public class MenuItemBean {
 
-    private String id;
+    private final String id;
 
     public MenuItemBean(String id) {
         this.id = id;
@@ -19,7 +19,4 @@ public class MenuItemBean {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 }

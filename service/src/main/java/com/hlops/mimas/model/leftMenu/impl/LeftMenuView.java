@@ -3,6 +3,7 @@ package com.hlops.mimas.model.leftMenu.impl;
 import com.hlops.mimas.model.leftMenu.MenuBean;
 import com.hlops.mimas.model.leftMenu.MenuGroupBean;
 import com.hlops.mimas.model.leftMenu.MenuItemBean;
+import com.hlops.mimas.utils.CookieProvider;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +14,8 @@ import com.hlops.mimas.model.leftMenu.MenuItemBean;
  */
 public class LeftMenuView extends MenuGroupBean implements MenuBean {
 
-    public LeftMenuView() {
-        super("leftMenuView");
+    public LeftMenuView(CookieProvider cookieProvider) {
+        super("leftMenuView", cookieProvider);
         getItems().add(new MenuItemBean(getId() + "Tile"));
         getItems().add(new MenuItemBean(getId() + "List"));
         getItems().add(new MenuItemBean(getId() + "Details"));

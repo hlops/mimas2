@@ -4,6 +4,9 @@ import com.hlops.mimas.model.ModelBean;
 import com.hlops.mimas.model.leftMenu.MenuBean;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuView;
+import com.hlops.mimas.utils.CookieProvider;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlList;
 import java.util.ArrayList;
@@ -21,7 +24,8 @@ public class ProjectsBean extends ModelBean {
     @XmlList
     private List<ProjectItemBean> projects;
 
-    public ProjectsBean() {
+    public ProjectsBean(CookieProvider cookieProvider) {
+        super(cookieProvider);
         projects = new ArrayList<ProjectItemBean>();
     }
 
@@ -30,8 +34,18 @@ public class ProjectsBean extends ModelBean {
     }
 
     @Override
-    protected void createLeftMenu(List<MenuBean> leftMenu) {
-        leftMenu.add(new LeftMenuOrder());
-        leftMenu.add(new LeftMenuView());
+    protected void createLeftMenu(CookieProvider cookieProvider, List<MenuBean> leftMenu) {
+        leftMenu.add(new LeftMenuOrder(cookieProvider));
+        leftMenu.add(new LeftMenuView(cookieProvider));
+    }
+
+    @Nullable
+    public MenuBean getLeftMenuItem(@NotNull String id) {
+        for (MenuBean bean : getLeftMenu()) {
+            if (id.equals(bean.getId())) {
+                return bean;
+            }
+        }
+        return null;
     }
 }

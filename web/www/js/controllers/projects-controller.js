@@ -24,14 +24,15 @@ define([
             });
 
             this.subscribeEvent("menuClick", function (el) {
-                //$.cookie();
                 var itemId = $(el).attr("item");
                 var parentItemId = $(el).attr("parentItem");
-                var parentItem = this.model.get("leftMenu").get(parentItemId);
-                var menu = _.find(parentItem.get("items"), function(el) {
-                    return el.id === itemId;
-                });
-                alert(menu.id)
+                /*
+                 var parentItem = this.model.get("leftMenu").get(parentItemId);
+                 var menu = _.find(parentItem.get("items"), function(el) {
+                 return el.id === itemId;
+                 });
+                 */
+                $.cookie(parentItemId, itemId);
                 controller.model.fetch({data: {query:controller.query, menu: el.id}});
             });
         }
