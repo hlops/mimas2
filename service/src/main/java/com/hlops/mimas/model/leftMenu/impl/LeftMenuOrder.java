@@ -14,12 +14,10 @@ import com.hlops.mimas.utils.CookieProvider;
  */
 public class LeftMenuOrder extends MenuGroupBean implements MenuBean {
 
-    public static final String ID = "leftMenuOrderBy";
-
-    public LeftMenuOrder(CookieProvider cookieProvider) {
-        super(ID, cookieProvider);
-        getItems().add(new MenuItemBean(getId() + "Abc"));
-        getItems().add(new MenuItemBean(getId() + "Date"));
+    public LeftMenuOrder(String alias, CookieProvider cookieProvider) {
+        super(null, "leftMenuOrderBy", alias + "O", cookieProvider);
+        getItems().add(new MenuItemBean(this, "Abc", "A"));
+        getItems().add(new MenuItemBean(this, "Date", "D"));
     }
 
     @Override
@@ -28,6 +26,6 @@ public class LeftMenuOrder extends MenuGroupBean implements MenuBean {
     }
 
     public boolean isAsc() {
-        return getSelected() != null && getSelected().equals(getId() + "Abc");
+        return getSelected() != null && getSelected().equals(getId() + "A");
     }
 }

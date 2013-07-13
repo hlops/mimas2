@@ -14,11 +14,11 @@ import com.hlops.mimas.utils.CookieProvider;
  */
 public class LeftMenuView extends MenuGroupBean implements MenuBean {
 
-    public LeftMenuView(CookieProvider cookieProvider) {
-        super("leftMenuView", cookieProvider);
-        getItems().add(new MenuItemBean(getId() + "Tile"));
-        getItems().add(new MenuItemBean(getId() + "List"));
-        getItems().add(new MenuItemBean(getId() + "Details"));
+    public LeftMenuView(String alias, CookieProvider cookieProvider) {
+        super(null, "leftMenuView", alias + "V", cookieProvider);
+        getItems().add(new MenuItemBean(this, "Tile", "T"));
+        getItems().add(new MenuItemBean(this, "List", "L"));
+        getItems().add(new MenuItemBean(this, "Details", "D"));
     }
 
     @Override

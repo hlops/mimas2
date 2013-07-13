@@ -40,6 +40,28 @@ define([
                 });
             });
             controller.model.fetch();
+
+            this.subscribeEvent("search", function (query) {
+                controller.query = query;
+                controller.model.fetch({data: {query:query}});
+            });
+
+            controller.subscribeEvent("menuClick", function (el) {
+                var itemId = $(el).attr("item");
+                var parentItemId = $(el).attr("parentItem");
+
+                var parentItem = this.model.get("leftMenu").get(parentItemId);
+                if (parentItem) {
+                    var item = _.find(parentItem.get("items"), function(el) {
+                        return el.id === itemId;
+                    });
+
+                    if (item) {
+                        $.cookie(parentItem.get("alias"), item.alias);
+                        controller.model.fetch({data: {query:controller.query}});
+                    }
+                }
+            });
         }
 
     });

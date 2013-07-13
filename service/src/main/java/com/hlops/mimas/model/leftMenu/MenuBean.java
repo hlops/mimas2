@@ -12,4 +12,6 @@ public interface MenuBean {
     String[] listI18nTemplates();
 
     String getId();
+
+    String getAlias();
 }

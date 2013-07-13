@@ -14,6 +14,8 @@ import java.util.*;
  */
 public abstract class ModelBean {
 
+    public static final String LEFT_MENU_ID_PREFIX = "lb";
+
     private List<MenuBean> leftMenu = null;
     protected Set<String> i18n = new HashSet<String>();
 

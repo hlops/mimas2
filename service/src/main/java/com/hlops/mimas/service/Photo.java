@@ -22,8 +22,8 @@ import java.util.List;
  * Time: 1:14
  * To change this template use File | Settings | File Templates.
  */
-@Path("/projects")
-public class Project {
+@Path("/photos")
+public class Photo {
 
     @Context
     HttpServletRequest httpRequest;
@@ -40,7 +40,7 @@ public class Project {
         addFiltered(query, projects, "Project 4", "different text");
         addFiltered(query, projects, "Project 5", "very different text");
 
-        final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbOA");
+        final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbPhOA");
         if (order != null && order.isAsc()) {
             Collections.reverse(projects);
         }

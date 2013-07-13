@@ -1,9 +1,9 @@
 define([
     'controllers/base/controller',
-    'models/projects',
-    'views/projects-view',
+    'models/photos',
+    'views/photos-view',
     'cookies'
-], function (Controller, Projects, ProjectsView) {
+], function (Controller, Photos, PhotosView) {
     'use strict';
 
     return Controller.extend({
@@ -11,8 +11,8 @@ define([
         menu: "",
 
         show:function (params) {
-            this.model = new Projects();
-            this.view = new ProjectsView({model:this.model});
+            this.model = new Photos();
+            this.view = new PhotosView({model:this.model});
 
             this.loadModel();
 

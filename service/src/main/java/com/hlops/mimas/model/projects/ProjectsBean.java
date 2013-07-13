@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class ProjectsBean extends ModelBean {
 
+    public static final String ID = LEFT_MENU_ID_PREFIX + "Ph";
+
     @XmlList
     private List<ProjectItemBean> projects;
 
@@ -35,8 +37,8 @@ public class ProjectsBean extends ModelBean {
 
     @Override
     protected void createLeftMenu(CookieProvider cookieProvider, List<MenuBean> leftMenu) {
-        leftMenu.add(new LeftMenuOrder(cookieProvider));
-        leftMenu.add(new LeftMenuView(cookieProvider));
+        leftMenu.add(new LeftMenuOrder(ID, cookieProvider));
+        leftMenu.add(new LeftMenuView(ID, cookieProvider));
     }
 
     @Nullable
