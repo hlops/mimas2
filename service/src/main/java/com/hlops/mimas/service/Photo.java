@@ -1,8 +1,8 @@
 package com.hlops.mimas.service;
 
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
-import com.hlops.mimas.model.projects.ProjectItemBean;
-import com.hlops.mimas.model.projects.ProjectsBean;
+import com.hlops.mimas.model.photo.PhotoItemBean;
+import com.hlops.mimas.model.photo.PhotosBean;
 import com.hlops.mimas.utils.CookieProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,26 +30,26 @@ public class Photo {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ProjectsBean list(@QueryParam("query") String query) {
-        final ProjectsBean projectsBean = new ProjectsBean(new CookieProvider(httpRequest));
-        final List<ProjectItemBean> projects = projectsBean.getProjects();
+    public PhotosBean list(@QueryParam("query") String query) {
+        final PhotosBean photosBean = new PhotosBean(new CookieProvider(httpRequest));
+        final List<PhotoItemBean> photos = photosBean.getPhotos();
 
-        addFiltered(query, projects, "Project 1", "some text");
-        addFiltered(query, projects, "Project 2", "some more text");
-        addFiltered(query, projects, "Project 3", "some other text");
-        addFiltered(query, projects, "Project 4", "different text");
-        addFiltered(query, projects, "Project 5", "very different text");
+        addFiltered(query, photos, "Project 1", "some text");
+        addFiltered(query, photos, "Project 2", "some more text");
+        addFiltered(query, photos, "Project 3", "some other text");
+        addFiltered(query, photos, "Project 4", "different text");
+        addFiltered(query, photos, "Project 5", "very different text");
 
-        final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbPhOA");
+        final LeftMenuOrder order = (LeftMenuOrder) photosBean.getLeftMenuItem("lbPhOA");
         if (order != null && order.isAsc()) {
-            Collections.reverse(projects);
+            Collections.reverse(photos);
         }
-        return projectsBean;
+        return photosBean;
     }
 
-    private void addFiltered(String query, List<ProjectItemBean> projects, String name, String description) {
+    private void addFiltered(String query, List<PhotoItemBean> projects, String name, String description) {
         if (query == null || name.toLowerCase().contains(query.toLowerCase()) || description.toLowerCase().contains(query.toLowerCase())) {
-            projects.add(new ProjectItemBean(name, description));
+            projects.add(new PhotoItemBean(name, description, ""));
         }
     }
 }

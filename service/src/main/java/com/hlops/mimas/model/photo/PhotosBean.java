@@ -1,4 +1,4 @@
-package com.hlops.mimas.model.projects;
+package com.hlops.mimas.model.photo;
 
 import com.hlops.mimas.model.ModelBean;
 import com.hlops.mimas.model.leftMenu.MenuBean;
@@ -19,20 +19,20 @@ import java.util.List;
  * Time: 1:27
  * To change this template use File | Settings | File Templates.
  */
-public class ProjectsBean extends ModelBean {
+public class PhotosBean extends ModelBean {
 
-    public static final String ID = LEFT_MENU_ID_PREFIX + "Pr";
+    public static final String ID = LEFT_MENU_ID_PREFIX + "Ph";
 
     @XmlList
-    private List<ProjectItemBean> projects;
+    private List<PhotoItemBean> photos;
 
-    public ProjectsBean(CookieProvider cookieProvider) {
+    public PhotosBean(CookieProvider cookieProvider) {
         super(cookieProvider);
-        projects = new ArrayList<ProjectItemBean>();
+        photos = new ArrayList<PhotoItemBean>();
     }
 
-    public List<ProjectItemBean> getProjects() {
-        return projects;
+    public List<PhotoItemBean> getPhotos() {
+        return photos;
     }
 
     @Override

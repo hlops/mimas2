@@ -34,22 +34,18 @@ public class Project {
         final ProjectsBean projectsBean = new ProjectsBean(new CookieProvider(httpRequest));
         final List<ProjectItemBean> projects = projectsBean.getProjects();
 
-        addFiltered(query, projects, "Project 1", "some text");
-        addFiltered(query, projects, "Project 2", "some more text");
-        addFiltered(query, projects, "Project 3", "some other text");
-        addFiltered(query, projects, "Project 4", "different text");
-        addFiltered(query, projects, "Project 5", "very different text");
+        addFiltered(query, projects, "Photo", "My photos", "photo");
 
-        final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbOA");
+        final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbPrOA");
         if (order != null && order.isAsc()) {
             Collections.reverse(projects);
         }
         return projectsBean;
     }
 
-    private void addFiltered(String query, List<ProjectItemBean> projects, String name, String description) {
+    private void addFiltered(String query, List<ProjectItemBean> projects, String name, String description, String url) {
         if (query == null || name.toLowerCase().contains(query.toLowerCase()) || description.toLowerCase().contains(query.toLowerCase())) {
-            projects.add(new ProjectItemBean(name, description));
+            projects.add(new ProjectItemBean(name, description, url));
         }
     }
 }

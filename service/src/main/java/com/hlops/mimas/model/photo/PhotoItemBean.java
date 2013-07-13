@@ -1,4 +1,4 @@
-package com.hlops.mimas.model.projects;
+package com.hlops.mimas.model.photo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -10,13 +10,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * To change this template use File | Settings | File Templates.
  */
 @XmlRootElement
-public class ProjectItemBean {
+public class PhotoItemBean {
 
     private String name;
     private String description;
     private String ref;
 
-    public ProjectItemBean(String name, String description, String ref) {
+    public PhotoItemBean(String name, String description, String ref) {
         this.name = name;
         this.description = description;
         this.ref = ref;
