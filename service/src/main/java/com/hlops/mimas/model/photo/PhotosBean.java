@@ -1,5 +1,7 @@
 package com.hlops.mimas.model.photo;
 
+import com.hlops.mimas.core.data.bean.photo.Photo;
+import com.hlops.mimas.core.data.bean.photo.PhotoAlbum;
 import com.hlops.mimas.model.ModelBean;
 import com.hlops.mimas.model.leftMenu.MenuBean;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
@@ -10,7 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlList;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,16 +27,16 @@ public class PhotosBean extends ModelBean {
 
     public static final String ID = LEFT_MENU_ID_PREFIX + "Ph";
 
+    private String name, description;
+
     @XmlList
-    private List<PhotoItemBean> photos;
+    private Map<String, PhotoAlbumBean> albums = new HashMap<String, PhotoAlbumBean>();
+
+    @XmlList
+    private List<PhotoItemBean> photos = new ArrayList<PhotoItemBean>();
 
     public PhotosBean(CookieProvider cookieProvider) {
         super(cookieProvider);
-        photos = new ArrayList<PhotoItemBean>();
-    }
-
-    public List<PhotoItemBean> getPhotos() {
-        return photos;
     }
 
     @Override
@@ -49,5 +53,40 @@ public class PhotosBean extends ModelBean {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<PhotoItemBean> getPhotos() {
+        return photos;
+    }
+
+    public Map<String, PhotoAlbumBean> getAlbums() {
+        return albums;
+    }
+
+    public void add(PhotoAlbum album, Photo photo) {
+        String albumId = addAlbum(album);
+        getPhotos().add(new PhotoItemBean(albumId, photo));
+    }
+
+    private String addAlbum(PhotoAlbum album) {
+        String albumName = album.getName();
+        if (!albums.containsKey(albumName)) {
+            albums.put(albumName, new PhotoAlbumBean(album));
+        }
+        return albumName;
+    }
+
+    public void addAll(PhotoAlbum album, List<Photo> photos) {
+        for (Photo photo: photos) {
+            add(album, photo);
+        }
     }
 }

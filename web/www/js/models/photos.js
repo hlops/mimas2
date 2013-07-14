@@ -11,12 +11,17 @@ define([
         model:PhotoItem
     });
 
+    var Albums = Collection.extend({
+        model:PhotoItem
+    });
+
     //noinspection UnnecessaryLocalVariableJS
     var Photo = Model.extend({
         url:"rest/photos",
         parse: function (data) {
             Model.prototype.parse.apply(this, arguments);
             this.set("photos", new Photos(data.photos), {silent: true});
+            this.set("albums", new Albums(data.albums), {silent: true});
             this.trigger("change");
         }
     });

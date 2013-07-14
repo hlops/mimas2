@@ -1,5 +1,7 @@
 package com.hlops.mimas.model.photo;
 
+import com.hlops.mimas.core.data.bean.photo.Photo;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -12,14 +14,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PhotoItemBean {
 
-    private String name;
-    private String description;
-    private String ref;
+    private final String albumId;
+    private final String name;
+    private final String description;
+    private final int width;
+    private final int height;
 
-    public PhotoItemBean(String name, String description, String ref) {
-        this.name = name;
-        this.description = description;
-        this.ref = ref;
+    public PhotoItemBean(String albumId, Photo photo) {
+        this.albumId = albumId;
+        this.name = photo.getName();
+        this.description = photo.getDescription();
+        this.width = photo.getImageSize().getWidth();
+        this.height = photo.getImageSize().getHeight();
+    }
+
+    public String getAlbumId() {
+        return albumId;
     }
 
     public String getName() {
@@ -30,7 +40,11 @@ public class PhotoItemBean {
         return description;
     }
 
-    public String getRef() {
-        return ref;
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
