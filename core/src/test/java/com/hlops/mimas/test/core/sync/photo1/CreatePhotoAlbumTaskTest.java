@@ -2,7 +2,7 @@ package com.hlops.mimas.test.core.sync.photo1;
 
 import com.google.inject.Inject;
 import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
-import com.hlops.mimas.core.module.ServiceModule;
+import com.hlops.mimas.core.inject.CoreGuiceModule;
 import com.hlops.mimas.core.service.photo.PhotoService;
 import com.hlops.mimas.test.GuiceJUnitRunner;
 import org.junit.Assert;
@@ -19,7 +19,7 @@ import java.io.File;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(GuiceJUnitRunner.class)
-@GuiceJUnitRunner.GuiceModules({ServiceModule.class})
+@GuiceJUnitRunner.GuiceModules({CoreGuiceModule.class})
 public class CreatePhotoAlbumTaskTest extends Assert {
 
     @Inject

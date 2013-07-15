@@ -1,7 +1,7 @@
 package com.hlops.mimas.test.core.service;
 
 import com.google.inject.Inject;
-import com.hlops.mimas.core.module.ServiceModule;
+import com.hlops.mimas.core.inject.CoreGuiceModule;
 import com.hlops.mimas.core.service.ImageService;
 import com.hlops.mimas.core.service.Size;
 import com.hlops.mimas.test.GuiceJUnitRunner;
@@ -20,7 +20,7 @@ import java.io.File;
  */
 
 @RunWith(GuiceJUnitRunner.class)
-@GuiceJUnitRunner.GuiceModules({ServiceModule.class})
+@GuiceJUnitRunner.GuiceModules({CoreGuiceModule.class})
 public class ImageServiceTest extends Assert {
 
     @Inject

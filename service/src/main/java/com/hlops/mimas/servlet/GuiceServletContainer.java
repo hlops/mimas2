@@ -5,7 +5,8 @@ import com.google.inject.Injector;
 import com.google.inject.Scope;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.servlet.ServletScopes;
-import com.hlops.mimas.core.module.ServiceModule;
+import com.hlops.mimas.core.inject.CoreGuiceModule;
+import com.hlops.mimas.inject.ServiceGuiceModule;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.guice.spi.container.GuiceComponentProviderFactory;
@@ -43,7 +44,8 @@ public class GuiceServletContainer extends ServletContainer {
                 new ServletModule() {
                     @Override
                     protected void configureServlets() {
-                        install(new ServiceModule());
+                        install(new CoreGuiceModule());
+                        install(new ServiceGuiceModule());
                     }
                 });
         webapp.initiate(config, new ServletGuiceComponentProviderFactory(config, injector));

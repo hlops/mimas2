@@ -2,7 +2,7 @@ package com.hlops.mimas.test.core.service.tv.impl;
 
 import com.google.inject.Inject;
 import com.hlops.mimas.core.data.bean.tv.TeleProgramItem;
-import com.hlops.mimas.core.module.ServiceModule;
+import com.hlops.mimas.core.inject.CoreGuiceModule;
 import com.hlops.mimas.core.service.tv.TVService;
 import com.hlops.mimas.test.GuiceJUnitRunner;
 import org.junit.Assert;
@@ -21,7 +21,7 @@ import java.util.zip.ZipFile;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(GuiceJUnitRunner.class)
-@GuiceJUnitRunner.GuiceModules({ServiceModule.class})
+@GuiceJUnitRunner.GuiceModules({CoreGuiceModule.class})
 public class TVServiceImplTest extends Assert {
 
     @Inject
