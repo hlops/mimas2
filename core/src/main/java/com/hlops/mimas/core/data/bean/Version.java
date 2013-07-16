@@ -27,6 +27,10 @@ public class Version implements Comparable<Version> {
         setVersion(version);
     }
 
+    public Version(Version version) {
+        this(version.getVersion());
+    }
+
     @XmlValue()
     public String getVersion() {
         return toString();
