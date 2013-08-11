@@ -1,15 +1,16 @@
 package com.hlops.mimas.core.inject;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.Scopes;
 import com.hlops.mimas.core.service.CacheService;
 import com.hlops.mimas.core.service.ImageService;
-import com.hlops.mimas.core.service.photo.PhotoService;
 import com.hlops.mimas.core.service.QueueService;
 import com.hlops.mimas.core.service.impl.CacheServiceImpl;
 import com.hlops.mimas.core.service.impl.ImageServiceImpl;
-import com.hlops.mimas.core.service.photo.impl.PhotoServiceImpl;
 import com.hlops.mimas.core.service.impl.QueueServiceImpl;
+import com.hlops.mimas.core.service.photo.PhotoService;
+import com.hlops.mimas.core.service.photo.impl.PhotoServiceImpl;
 import com.hlops.mimas.core.service.tv.TVService;
 import com.hlops.mimas.core.service.tv.impl.TVServiceImpl;
 
@@ -20,7 +21,7 @@ import com.hlops.mimas.core.service.tv.impl.TVServiceImpl;
  * Time: 22:20
  * To change this template use File | Settings | File Templates.
  */
-public class CoreGuiceModule extends AbstractModule {
+public class CoreGuiceModule extends AbstractModule implements Disposable {
 
     @Override
     protected void configure() {
@@ -33,4 +34,8 @@ public class CoreGuiceModule extends AbstractModule {
         bind(TVService.class).to(TVServiceImpl.class).in(Scopes.SINGLETON);
     }
 
+    @Override
+    public void dispose(Injector injector) {
+        injector.getProvider(QueueService.class).get().dispose();
+    }
 }

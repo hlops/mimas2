@@ -22,5 +22,7 @@ public interface QueueService {
     void incrementPoolSize();
 
     void decrementPoolSize();
+
+    void dispose();
 }
 

@@ -50,6 +50,11 @@ public class QueueServiceImpl implements QueueService {
         };
     }
 
+    @Override
+    public void dispose() {
+        threadExecutor.shutdown();
+    }
+
     public <T> Future<T> getFuture(CallableTask<T> callableTask) {
         EntityKey key = callableTask.getKey();
         @SuppressWarnings("unchecked") Future<T> result = syncMap.get(key);

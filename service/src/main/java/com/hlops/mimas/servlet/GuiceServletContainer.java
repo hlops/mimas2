@@ -2,18 +2,18 @@ package com.hlops.mimas.servlet;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Scope;
+import com.google.inject.Module;
 import com.google.inject.servlet.ServletModule;
-import com.google.inject.servlet.ServletScopes;
 import com.hlops.mimas.core.inject.CoreGuiceModule;
+import com.hlops.mimas.core.inject.Disposable;
 import com.hlops.mimas.inject.ServiceGuiceModule;
 import com.sun.jersey.api.core.ResourceConfig;
-import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.guice.spi.container.GuiceComponentProviderFactory;
 import com.sun.jersey.spi.container.WebApplication;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,31 +24,42 @@ import java.util.Map;
  */
 public class GuiceServletContainer extends ServletContainer {
 
+    private Injector injector;
+    private List<Disposable> disposableModules = new ArrayList<Disposable>();
+
     public class ServletGuiceComponentProviderFactory extends GuiceComponentProviderFactory {
         public ServletGuiceComponentProviderFactory(ResourceConfig config, Injector injector) {
             super(config, injector);
-        }
-
-        @Override
-        public Map<Scope, ComponentScope> createScopeMap() {
-            Map<Scope, ComponentScope> m = super.createScopeMap();
-
-            m.put(ServletScopes.REQUEST, ComponentScope.PerRequest);
-            return m;
         }
     }
 
     @Override
     protected void initiate(final ResourceConfig config, final WebApplication webapp) {
-        Injector injector = Guice.createInjector(
+        injector = Guice.createInjector(
                 new ServletModule() {
                     @Override
                     protected void configureServlets() {
                         install(new CoreGuiceModule());
                         install(new ServiceGuiceModule());
                     }
+
+                    @Override
+                    protected void install(Module module) {
+                        super.install(module);
+
+                        if (module instanceof Disposable) {
+                            disposableModules.add((Disposable) module);
+                        }
+                    }
                 });
         webapp.initiate(config, new ServletGuiceComponentProviderFactory(config, injector));
     }
 
+    @Override
+    public void destroy() {
+        for (Disposable module : disposableModules) {
+            module.dispose(injector);
+        }
+        super.destroy();
+    }
 }
