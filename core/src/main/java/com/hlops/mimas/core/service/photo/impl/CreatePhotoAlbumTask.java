@@ -23,7 +23,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -58,15 +60,20 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         return getAlbum(albumKey);
     }
 
+    private void createConfig(File configPath) {
+        //noinspection ResultOfMethodCallIgnored
+        configPath.mkdirs();
+        try {
+            Files.setAttribute(configPath.toPath(), "dos:hidden", true);
+        } catch (IOException e) {
+            logger.error(configPath.getAbsolutePath(), e);
+        }
+    }
+
     private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
         File configPath = new File(key.getFile(), MimasConfig.getInstance().getDefaultMimasFolder());
         if (!configPath.exists()) {
-            configPath.mkdirs();
-            try {
-                Files.setAttribute(configPath.toPath(), "dos:hidden", true);
-            } catch (IOException e) {
-                logger.error(configPath.getAbsolutePath(), e);
-            }
+            createConfig(configPath);
         }
         File configFile = new File(configPath, MimasConfig.getInstance().getPhotoConfig().getConfigName());
 
@@ -75,10 +82,10 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
             JAXBContext jc = JAXBContext.newInstance(PhotoAlbum.class);
             album = (PhotoAlbum) jc.createUnmarshaller().unmarshal(configFile);
         } else {
-            album = new PhotoAlbum(key.getFile().getName());
+            album = new PhotoAlbum(key);
         }
         if (!isActual(configFile, album)) {
-            load(album, key, configFile);
+            album = load(album, key);
             save(album, configFile);
         }
 
@@ -91,7 +98,7 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
             return false;
         }
 
-        if (!configFile.exists() || configFile.lastModified() < configFile.getParentFile().lastModified()) {
+        if (!configFile.exists() || configFile.lastModified() < configFile.getParentFile().getParentFile().lastModified()) {
             return false;
         }
         if (!album.getVersion().isCompatible(MimasConfig.getInstance().getPhotoConfig().getVersion())) {
@@ -100,38 +107,47 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         return true;
     }
 
-    private void load(final PhotoAlbum album, PhotoAlbumKey key, File configFile) {
+    private PhotoAlbum load(final PhotoAlbum oldAlbum, PhotoAlbumKey key) {
+        final PhotoAlbum newAlbum = new PhotoAlbum(key);
+        Map<String, Photo> oldPhotos = new HashMap<String, Photo>();
+        for (Photo photo : oldAlbum.getItems()) {
+            oldPhotos.put(photo.getName(), photo);
+        }
+
         File[] files = key.getFile().listFiles(new FileFilter() {
             public boolean accept(File f) {
                 //noinspection SimplifiableIfStatement
                 if (wildcardMatches(f, MimasConfig.getInstance().getPhotoConfig().getIncludedWildcard())) {
-                    return !wildcardMatches(f, album.getExcludedWildcard());
+                    return !wildcardMatches(f, oldAlbum.getExcludedWildcard());
                 }
                 return false;
             }
         });
-        List<Future> subTasks = new ArrayList<Future>();
+        List<Future<Photo>> subTasks = new ArrayList<Future<Photo>>();
         if (files != null) {
             for (File f : files) {
-                CreatePhotoTask createPhotoTask = new CreatePhotoTask(new PhotoKey(key, f.getName()));
-                subTasks.add(queue.getFuture(createPhotoTask));
+                Photo photo = oldPhotos.get(f.getName());
+                if (photo != null && f.lastModified() == photo.getTimestamp() && f.length() == photo.getLength()) {
+                    // not modified
+                    newAlbum.getItems().add(photo);
+                } else {
+                    CreatePhotoTask createPhotoTask = new CreatePhotoTask(new PhotoKey(key, f.getName()));
+                    subTasks.add(queue.getFuture(createPhotoTask));
+                }
             }
         }
 
-        queue.incrementPoolSize();
-        try {
-        for (Future f : subTasks) {
+        for (Future<Photo> f : subTasks) {
             try {
-                album.getItems().add((Photo) f.get());
+                newAlbum.getItems().add(f.get());
             } catch (InterruptedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (ExecutionException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
-        } finally {
-            queue.decrementPoolSize();
-        }
+
+        return newAlbum;
     }
 
     private static boolean wildcardMatches(File f, @Nullable String wildcards) {
@@ -154,4 +170,8 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         marshaller.marshal(album, configFile);
     }
 
+    @Override
+    public boolean isBlocking() {
+        return true;
+    }
 }

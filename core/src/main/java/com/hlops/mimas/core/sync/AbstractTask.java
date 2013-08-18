@@ -12,4 +12,5 @@ import com.hlops.mimas.core.data.TaskKey;
  */
 public interface AbstractTask extends KeyProvider<TaskKey> {
 
+    boolean isBlocking();
 }

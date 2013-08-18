@@ -13,11 +13,20 @@ import org.jetbrains.annotations.NotNull;
 public class TaskKey implements EntityKey {
 
     private final Class<? extends AbstractTask> taskClass;
-    private final EntityKey albumKey;
+    private final EntityKey key;
+    private long timeout;
 
     public TaskKey(@NotNull Class<? extends AbstractTask> taskClass, @NotNull EntityKey entityKey) {
         this.taskClass = taskClass;
-        this.albumKey = entityKey;
+        this.key = entityKey;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 
     @Override
@@ -27,7 +36,7 @@ public class TaskKey implements EntityKey {
 
         TaskKey taskKey = (TaskKey) o;
 
-        if (!albumKey.equals(taskKey.albumKey)) return false;
+        if (!key.equals(taskKey.key)) return false;
         if (!taskClass.equals(taskKey.taskClass)) return false;
 
         return true;
@@ -36,12 +45,12 @@ public class TaskKey implements EntityKey {
     @Override
     public int hashCode() {
         int result = taskClass.hashCode();
-        result = 31 * result + albumKey.hashCode();
+        result = 31 * result + key.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return taskClass.getSimpleName() + ":" + albumKey;
+        return taskClass.getSimpleName() + ":" + key;
     }
 }

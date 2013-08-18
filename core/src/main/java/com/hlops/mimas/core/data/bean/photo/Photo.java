@@ -15,14 +15,18 @@ public class Photo {
     private String name;
     private String description;
     private ImageSize imageSize;
+    private long length;
+    private long timestamp;
 
     public Photo() {
     }
 
-    public Photo(@NotNull String name, @Nullable String description, @NotNull ImageSize imageSize) {
+    public Photo(@NotNull String name, @Nullable String description, @NotNull ImageSize imageSize, long length, long timestamp) {
         this.imageSize = imageSize;
         this.description = description;
         this.name = name;
+        this.length = length;
+        this.timestamp = timestamp;
     }
 
     public String getName() {
@@ -47,5 +51,21 @@ public class Photo {
 
     public void setImageSize(ImageSize imageSize) {
         this.imageSize = imageSize;
+    }
+
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

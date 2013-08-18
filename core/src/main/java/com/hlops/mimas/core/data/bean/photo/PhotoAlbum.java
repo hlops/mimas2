@@ -2,6 +2,7 @@ package com.hlops.mimas.core.data.bean.photo;
 
 import com.hlops.mimas.core.config.MimasConfig;
 import com.hlops.mimas.core.data.bean.Version;
+import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
 import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -38,7 +39,11 @@ public class PhotoAlbum {
     @XmlElement(required = false)
     private String excludedWildcard;
 
-    public PhotoAlbum() {
+    private PhotoAlbum() {
+    }
+
+    public PhotoAlbum(PhotoAlbumKey key) {
+        this(key.getFile().getName());
     }
 
     public PhotoAlbum(String name) {

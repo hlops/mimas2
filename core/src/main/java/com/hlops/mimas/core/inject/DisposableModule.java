@@ -9,7 +9,7 @@ import com.google.inject.Injector;
  * Time: 0:55
  * To change this template use File | Settings | File Templates.
  */
-public interface Disposable {
+public interface DisposableModule {
 
     void dispose(Injector injector);
 }

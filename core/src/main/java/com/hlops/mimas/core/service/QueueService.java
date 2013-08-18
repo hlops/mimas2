@@ -3,7 +3,6 @@ package com.hlops.mimas.core.service;
 import com.hlops.mimas.core.sync.CallableTask;
 import com.hlops.mimas.core.sync.RunnableTask;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -17,11 +16,7 @@ public interface QueueService {
 
     <T> Future<T> getFuture(CallableTask<T> callableTask);
 
-    void waitFuture(RunnableTask callableTask) throws ExecutionException, InterruptedException;
-
-    void incrementPoolSize();
-
-    void decrementPoolSize();
+    Future getFuture(RunnableTask callableTask);
 
     void dispose();
 }

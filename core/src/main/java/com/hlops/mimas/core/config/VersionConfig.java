@@ -31,7 +31,7 @@ public abstract class VersionConfig {
     }
 
     public boolean getRecreateConfig() {
-        return recreateConfig == null || recreateConfig;
+        return recreateConfig != null && recreateConfig;
     }
 
 }

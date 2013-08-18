@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.ServletModule;
 import com.hlops.mimas.core.inject.CoreGuiceModule;
-import com.hlops.mimas.core.inject.Disposable;
+import com.hlops.mimas.core.inject.DisposableModule;
 import com.hlops.mimas.inject.ServiceGuiceModule;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.guice.spi.container.GuiceComponentProviderFactory;
@@ -25,7 +25,7 @@ import java.util.List;
 public class GuiceServletContainer extends ServletContainer {
 
     private Injector injector;
-    private List<Disposable> disposableModules = new ArrayList<Disposable>();
+    private List<DisposableModule> disposableModules = new ArrayList<DisposableModule>();
 
     public class ServletGuiceComponentProviderFactory extends GuiceComponentProviderFactory {
         public ServletGuiceComponentProviderFactory(ResourceConfig config, Injector injector) {
@@ -47,8 +47,8 @@ public class GuiceServletContainer extends ServletContainer {
                     protected void install(Module module) {
                         super.install(module);
 
-                        if (module instanceof Disposable) {
-                            disposableModules.add((Disposable) module);
+                        if (module instanceof DisposableModule) {
+                            disposableModules.add((DisposableModule) module);
                         }
                     }
                 });
@@ -57,7 +57,7 @@ public class GuiceServletContainer extends ServletContainer {
 
     @Override
     public void destroy() {
-        for (Disposable module : disposableModules) {
+        for (DisposableModule module : disposableModules) {
             module.dispose(injector);
         }
         super.destroy();

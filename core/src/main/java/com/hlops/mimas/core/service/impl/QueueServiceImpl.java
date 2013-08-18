@@ -11,6 +11,7 @@ import com.hlops.mimas.core.sync.RunnableTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,6 +37,11 @@ public class QueueServiceImpl implements QueueService {
             protected void beforeExecute(Thread t, Runnable r) {
                 super.beforeExecute(t, r);
                 logger.debug("before executing thread {} runnable {}", t, r);
+                KeyFutureTask task = (KeyFutureTask) r;
+                if (task.getTask().isBlocking()) {
+                    applyPoolSize(poolSize.incrementAndGet(), true);
+                }
+                task.startTime = System.currentTimeMillis();
             }
 
             @Override
@@ -43,8 +49,13 @@ public class QueueServiceImpl implements QueueService {
                 super.afterExecute(r, t);
                 KeyFutureTask task = (KeyFutureTask) r;
                 logger.debug("after executing runnable {}, Throwable {}", r, t);
-                if (task.isWaitingTask) {
+                if (task.getTask().isBlocking()) {
                     applyPoolSize(poolSize.decrementAndGet(), false);
+                }
+                task.finishedTime = System.currentTimeMillis();
+                TaskKey key = task.getKey();
+                if (key.getTimeout() <= 0) {
+                    syncMap.remove(key);
                 }
             }
         };
@@ -55,50 +66,47 @@ public class QueueServiceImpl implements QueueService {
         threadExecutor.shutdown();
     }
 
+    private void removeObsoleteTasks() {
+        for (Map.Entry<EntityKey, Future> entry : syncMap.entrySet()) {
+            KeyFutureTask task = (KeyFutureTask) entry.getValue();
+            if (task.finishedTime > 0 && task.finishedTime + task.getKey().getTimeout() <= System.currentTimeMillis()) {
+                syncMap.remove(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
     public <T> Future<T> getFuture(CallableTask<T> callableTask) {
+        removeObsoleteTasks();
         EntityKey key = callableTask.getKey();
         @SuppressWarnings("unchecked") Future<T> result = syncMap.get(key);
-        if (result != null) {
-            logger.debug("getFuture already exists ({})", callableTask.getKey());
-            return result;
-        }
-
-        FutureTask<T> newFuture = new KeyFutureTask<T>(callableTask, false);
-        //noinspection unchecked
-        result = (Future<T>) syncMap.putIfAbsent(key, newFuture);
         if (result == null) {
-            threadExecutor.execute(newFuture);
-            result = newFuture;
-            logger.debug("getFuture was added to queue ({})", callableTask.getKey());
+            FutureTask<T> newFuture = new KeyFutureTask<T>(callableTask);
+            //noinspection unchecked
+            result = (Future<T>) syncMap.putIfAbsent(key, newFuture);
+            if (result == null) {
+                threadExecutor.execute(newFuture);
+                result = newFuture;
+                logger.debug("New callable was added to queue ({})", callableTask.getKey());
+            }
         }
         return result;
     }
 
-    public void waitFuture(RunnableTask runnableTask) throws ExecutionException, InterruptedException {
+    public Future getFuture(RunnableTask runnableTask) {
+        removeObsoleteTasks();
         EntityKey key = runnableTask.getKey();
         @SuppressWarnings("unchecked") Future result = syncMap.get(key);
         if (result == null) {
-            FutureTask newFuture = new KeyFutureTask(runnableTask, true);
+            FutureTask newFuture = new KeyFutureTask(runnableTask);
             //noinspection unchecked
             result = syncMap.putIfAbsent(key, newFuture);
             if (result == null) {
-                applyPoolSize(poolSize.incrementAndGet(), true);
                 threadExecutor.execute(newFuture);
                 result = newFuture;
-                logger.debug("waitFuture was added to queue ({})", runnableTask.getKey());
+                logger.debug("New runnable was added to queue ({})", runnableTask.getKey());
             }
         }
-        result.get();
-    }
-
-    @Override
-    public void incrementPoolSize() {
-        applyPoolSize(poolSize.incrementAndGet(), true);
-    }
-
-    @Override
-    public void decrementPoolSize() {
-        applyPoolSize(poolSize.decrementAndGet(), false);
+        return result;
     }
 
     private synchronized void applyPoolSize(int n, boolean isIncrementing) {
@@ -113,20 +121,20 @@ public class QueueServiceImpl implements QueueService {
 
     class KeyFutureTask<T> extends FutureTask<T> implements KeyProvider<TaskKey> {
 
-        private final boolean isWaitingTask;
         private final TaskKey key;
         private final AbstractTask task;
 
-        public KeyFutureTask(CallableTask<T> callable, boolean waitingTask) {
+        private long startTime;
+        private long finishedTime;
+
+        public KeyFutureTask(CallableTask<T> callable) {
             super(callable);
-            isWaitingTask = waitingTask;
             this.key = callable.getKey();
             this.task = callable;
         }
 
-        public KeyFutureTask(RunnableTask runnable, boolean waitingTask) {
+        public KeyFutureTask(RunnableTask runnable) {
             super(runnable, null);
-            isWaitingTask = waitingTask;
             this.key = runnable.getKey();
             this.task = runnable;
         }
@@ -138,10 +146,6 @@ public class QueueServiceImpl implements QueueService {
 
         public AbstractTask getTask() {
             return task;
-        }
-
-        public boolean isWaitingTask() {
-            return isWaitingTask;
         }
 
         @Override

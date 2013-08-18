@@ -21,7 +21,7 @@ import com.hlops.mimas.core.service.tv.impl.TVServiceImpl;
  * Time: 22:20
  * To change this template use File | Settings | File Templates.
  */
-public class CoreGuiceModule extends AbstractModule implements Disposable {
+public class CoreGuiceModule extends AbstractModule implements DisposableModule {
 
     @Override
     protected void configure() {

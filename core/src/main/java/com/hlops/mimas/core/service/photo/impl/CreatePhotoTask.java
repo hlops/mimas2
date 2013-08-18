@@ -38,10 +38,15 @@ class CreatePhotoTask implements CallableTask<Photo> {
     private Photo getPhoto(PhotoKey key) throws IOException {
         logger.debug("CreatePhotoTask.getPhoto {}", key.getFile().getName());
         BufferedImage image = ImageIO.read(key.getFile());
-        return new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()));
+        return new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()), key.getFile().length(), key.getFile().lastModified());
     }
 
     public Photo call() throws Exception {
         return getPhoto(key);
+    }
+
+    @Override
+    public boolean isBlocking() {
+        return false;
     }
 }
