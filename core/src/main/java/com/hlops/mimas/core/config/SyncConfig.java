@@ -1,6 +1,9 @@
 package com.hlops.mimas.core.config;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +13,7 @@ import javax.xml.bind.annotation.*;
  * To change this template use File | Settings | File Templates.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {})
+@XmlType(propOrder = {"queueExecutors"})
 public class SyncConfig {
 
     @XmlElement(required = true, defaultValue = "4")

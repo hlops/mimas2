@@ -10,10 +10,10 @@
       <xs:extension base="tns:versionConfig">
         <xs:sequence>
           <xs:element name="dateFormat" type="xs:string" default="dd.MM.YYY hh:mm:ss"/>
-          <xs:element name="syncConfig" type="tns:syncConfig"/>
           <xs:element name="mimasFolderName" type="xs:string"/>
-          <xs:element name="photoConfig" type="tns:photoConfig"/>
+          <xs:element name="syncConfig" type="tns:syncConfig"/>
           <xs:element name="managerConfig" type="tns:rootManagerConfig"/>
+          <xs:element name="photoConfig" type="tns:photoConfig"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -31,17 +31,17 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="rootManagerConfig">
+    <xs:sequence>
+      <xs:element name="path" type="pathBean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="photoConfig">
     <xs:sequence>
       <xs:element name="includedWildcard" type="xs:string" minOccurs="0"/>
       <xs:element name="configFileName" type="xs:string" minOccurs="0"/>
       <xs:element name="recreateConfig" type="xs:boolean" default="false" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="rootManagerConfig">
-    <xs:sequence>
-      <xs:element name="path" type="pathBean" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

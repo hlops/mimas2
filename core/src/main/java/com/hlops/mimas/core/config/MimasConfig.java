@@ -16,7 +16,7 @@ import java.net.URL;
 @XmlRootElement(name = "mimas")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
-        "dateFormat", "syncConfig", "mimasFolderName", "photoConfig", "rootManagerConfig"
+        "dateFormat", "mimasFolderName", "syncConfig", "rootManagerConfig", "photoConfig"
 })
 @SuppressWarnings("FieldCanBeLocal")
 public class MimasConfig extends VersionConfig {

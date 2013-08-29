@@ -5,20 +5,19 @@
     <version>1.0.1</version>
 
     <m:dateFormat>dd.MM.YYY hh:mm:ss</m:dateFormat>
+    <m:mimasFolderName>.mimas</m:mimasFolderName>
 
     <m:syncConfig>
         <m:queueExecutors>4</m:queueExecutors>
     </m:syncConfig>
 
-    <m:mimasFolderName>.mimas</m:mimasFolderName>
+    <m:managerConfig>
+    </m:managerConfig>
 
     <m:photoConfig>
         <m:includedWildcard>*.jpg,*.jpeg,*.gif,*.png</m:includedWildcard>
         <m:configFileName>foto.xml</m:configFileName>
         <m:recreateConfig>false</m:recreateConfig>
     </m:photoConfig>
-
-    <m:managerConfig>
-    </m:managerConfig>
 
 </m:mimas>
