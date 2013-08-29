@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mimas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="mimas.xsd">
+<m:mimas xmlns:m="http://www.hlops.ru/mimas/1.0.1"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.hlops.ru/mimas/1.0.1 http://www.hlops.ru/xsd/1.0.1/mimas-1.0.1.xsd">
     <version>1.0.1</version>
-    <dateFormat>dd.MM.YYY hh:mm:ss</dateFormat>
-    <defaultMimasFolder>.mimas</defaultMimasFolder>
-    <photoConfig>
-        <version>1.0.1</version>
-        <recreateConfig>false</recreateConfig>
-    </photoConfig>
-    <queueExecutors>4</queueExecutors>
-</mimas>
+
+    <m:dateFormat>dd.MM.YYY hh:mm:ss</m:dateFormat>
+
+    <m:syncConfig>
+        <m:queueExecutors>4</m:queueExecutors>
+    </m:syncConfig>
+
+    <m:mimasFolderName>.mimas</m:mimasFolderName>
+
+    <m:photoConfig>
+        <m:includedWildcard>*.jpg,*.jpeg,*.gif,*.png</m:includedWildcard>
+        <m:configFileName>foto.xml</m:configFileName>
+        <m:recreateConfig>false</m:recreateConfig>
+    </m:photoConfig>
+
+    <m:managerConfig>
+    </m:managerConfig>
+
+</m:mimas>

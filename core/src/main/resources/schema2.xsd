@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="version" type="version"/>
+
+  <xs:complexType name="pathBean">
+    <xs:sequence>
+      <xs:element name="root" type="xs:string" minOccurs="0"/>
+      <xs:element name="syntax" type="fileSystemSyntax" minOccurs="0"/>
+      <xs:element name="includes" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="excludes" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="path" type="pathBean" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="version">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="fileSystemSyntax">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="glob"/>
+      <xs:enumeration value="regexp"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

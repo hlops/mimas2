@@ -15,26 +15,31 @@ import java.net.URL;
 
 @XmlRootElement(name = "mimas")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+        "dateFormat", "syncConfig", "mimasFolderName", "photoConfig", "rootManagerConfig"
+})
 @SuppressWarnings("FieldCanBeLocal")
 public class MimasConfig extends VersionConfig {
 
-    @XmlElement(required = true)
-    private String dateFormat;
+    @XmlElement(required = true, defaultValue = "dd.MM.YYY hh:mm:ss")
+    private String dateFormat = "dd.MM.YYY hh:mm:ss";
 
     @XmlElement(required = true)
-    private String defaultMimasFolder = ".mimas";
+    private String mimasFolderName = ".mimas";
+
+    @XmlElement(required = true)
+    private SyncConfig syncConfig = new SyncConfig();
 
     @XmlElement(required = true)
     private PhotoConfig photoConfig = new PhotoConfig();
 
-    @XmlElement(required = true, defaultValue = "4")
-    private int queueExecutors = 4;
-
+    @XmlElement(name = "managerConfig", required = true)
+    private RootManagerConfig rootManagerConfig = new RootManagerConfig();
 
     @XmlTransient
-    private static MimasConfig instance = createMimasConfig();
+    private static MimasConfig instance = loadMimasConfig();
 
-    private static MimasConfig createMimasConfig() {
+    private static MimasConfig loadMimasConfig() {
         try {
             JAXBContext jc = JAXBContext.newInstance(MimasConfig.class);
             URL resource = MimasConfig.class.getResource("/mimas.xml");
@@ -51,23 +56,22 @@ public class MimasConfig extends VersionConfig {
         return instance;
     }
 
-    private MimasConfig() {
+    public MimasConfig() {
     }
 
     public String getDateFormat() {
         return dateFormat;
     }
 
-    public String getDefaultMimasFolder() {
-        return defaultMimasFolder;
+    public String getMimasFolderName() {
+        return mimasFolderName;
     }
 
     public PhotoConfig getPhotoConfig() {
         return photoConfig;
     }
 
-    public int getQueueExecutors() {
-        return queueExecutors;
+    public SyncConfig getSyncConfig() {
+        return syncConfig;
     }
-
 }

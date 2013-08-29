@@ -31,7 +31,7 @@ public class QueueServiceImpl implements QueueService {
     private static Logger logger = LoggerFactory.getLogger(QueueService.class);
 
     public QueueServiceImpl() {
-        poolSize.set(MimasConfig.getInstance().getQueueExecutors());
+        poolSize.set(MimasConfig.getInstance().getSyncConfig().getQueueExecutors());
         threadExecutor = new ThreadPoolExecutor(poolSize.intValue(), poolSize.intValue(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()) {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {

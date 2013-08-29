@@ -5,6 +5,7 @@ import com.hlops.mimas.core.data.bean.Version;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,14 +14,13 @@ import javax.xml.bind.annotation.XmlElement;
  * Time: 19:02
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("UnusedDeclaration")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {})
 public abstract class VersionConfig {
 
     @XmlElement(required = true)
     private Version version = new Version();
-
-    @XmlElement(required = false, defaultValue = "false")
-    private Boolean recreateConfig;
 
     public Version getVersion() {
         return version;
@@ -28,10 +28,6 @@ public abstract class VersionConfig {
 
     protected void setVersion(Version version) {
         this.version = version;
-    }
-
-    public boolean getRecreateConfig() {
-        return recreateConfig != null && recreateConfig;
     }
 
 }

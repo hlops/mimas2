@@ -9,4 +9,8 @@ import junit.framework.TestCase;
  * Time: 7:20 PM
  */
 public class RootManagerBeanTest extends TestCase {
+
+    public void testName() throws Exception {
+        RootManagerBean root = new RootManagerBean();
+    }
 }

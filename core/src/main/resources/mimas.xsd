@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://www.hlops.ru/mimas/1.0.1" xmlns:tns="http://www.hlops.ru/mimas/1.0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:m="http://www.hlops.ru/mimas/1.0.1">
 
-  <xs:element name="mimas" type="mimasConfig"/>
+  <xs:import schemaLocation="schema2.xsd"/>
 
-  <xs:element name="photo" type="photoConfig"/>
-
-  <xs:element name="version" type="version"/>
+  <xs:element name="mimas" type="tns:mimasConfig"/>
 
   <xs:complexType name="mimasConfig">
     <xs:complexContent>
-      <xs:extension base="versionConfig">
+      <xs:extension base="tns:versionConfig">
         <xs:sequence>
-          <xs:element name="dateFormat" type="xs:string"/>
-          <xs:element name="defaultMimasFolder" type="xs:string"/>
-          <xs:element name="photoConfig" type="photoConfig"/>
-          <xs:element name="queueExecutors" type="xs:int"/>
+          <xs:element name="dateFormat" type="xs:string" default="dd.MM.YYY hh:mm:ss"/>
+          <xs:element name="syncConfig" type="tns:syncConfig"/>
+          <xs:element name="mimasFolderName" type="xs:string"/>
+          <xs:element name="photoConfig" type="tns:photoConfig"/>
+          <xs:element name="managerConfig" type="tns:rootManagerConfig"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -23,21 +22,27 @@
   <xs:complexType name="versionConfig" abstract="true">
     <xs:sequence>
       <xs:element ref="version"/>
-      <xs:element name="recreateConfig" type="xs:boolean" default="false" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="syncConfig">
+    <xs:sequence>
+      <xs:element name="queueExecutors" type="xs:int" default="4"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="photoConfig">
-    <xs:complexContent>
-      <xs:extension base="versionConfig">
-        <xs:sequence>
-          <xs:element name="includedWildcard" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
+    <xs:sequence>
+      <xs:element name="includedWildcard" type="xs:string" minOccurs="0"/>
+      <xs:element name="configFileName" type="xs:string" minOccurs="0"/>
+      <xs:element name="recreateConfig" type="xs:boolean" default="false" minOccurs="0"/>
+    </xs:sequence>
   </xs:complexType>
 
-  <xs:simpleType name="version">
-    <xs:restriction base="xs:string"/>
-  </xs:simpleType>
+  <xs:complexType name="rootManagerConfig">
+    <xs:sequence>
+      <xs:element name="path" type="pathBean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
+

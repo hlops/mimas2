@@ -71,11 +71,11 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
     }
 
     private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
-        File configPath = new File(key.getFile(), MimasConfig.getInstance().getDefaultMimasFolder());
+        File configPath = new File(key.getFile(), MimasConfig.getInstance().getMimasFolderName());
         if (!configPath.exists()) {
             createConfig(configPath);
         }
-        File configFile = new File(configPath, MimasConfig.getInstance().getPhotoConfig().getConfigName());
+        File configFile = new File(configPath, MimasConfig.getInstance().getPhotoConfig().getConfigFileName());
 
         PhotoAlbum album;
         if (configFile.exists()) {
@@ -94,14 +94,14 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
 
     @SuppressWarnings("RedundantIfStatement")
     private boolean isActual(File configFile, PhotoAlbum album) {
-        if (MimasConfig.getInstance().getPhotoConfig().getRecreateConfig()) {
+        if (MimasConfig.getInstance().getPhotoConfig().isRecreateConfig()) {
             return false;
         }
 
         if (!configFile.exists() || configFile.lastModified() < configFile.getParentFile().getParentFile().lastModified()) {
             return false;
         }
-        if (!album.getVersion().isCompatible(MimasConfig.getInstance().getPhotoConfig().getVersion())) {
+        if (!album.getVersion().isCompatible(MimasConfig.getInstance().getVersion())) {
             return false;
         }
         return true;

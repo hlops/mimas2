@@ -1,8 +1,6 @@
 package com.hlops.mimas.core.config;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,18 +9,26 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Time: 19:09
  * To change this template use File | Settings | File Templates.
  */
-@XmlRootElement(name = "photo")
+@SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class PhotoConfig extends VersionConfig {
+@XmlType(propOrder = {"includedWildcard", "configFileName", "recreateConfig"})
+public class PhotoConfig {
 
     private String includedWildcard = "*.jpg,*.jpeg,*.gif,*.png";
-    private String configName = "foto.xml";
+    private String configFileName = "foto.xml";
+
+    @XmlElement(required = false, defaultValue = "false")
+    private Boolean recreateConfig;
 
     public String getIncludedWildcard() {
         return includedWildcard;
     }
 
-    public String getConfigName() {
-        return configName;
+    public String getConfigFileName() {
+        return configFileName;
+    }
+
+    public boolean isRecreateConfig() {
+        return recreateConfig != null && recreateConfig;
     }
 }

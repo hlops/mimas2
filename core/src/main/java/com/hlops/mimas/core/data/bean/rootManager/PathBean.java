@@ -10,7 +10,6 @@ import java.util.List;
  * Date: 7/15/13
  * Time: 7:25 PM
  */
-@XmlRootElement(name = "path")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PathBean {
 

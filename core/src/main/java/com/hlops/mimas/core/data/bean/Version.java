@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlValue;
 public class Version implements Comparable<Version> {
 
     private int major = 1;
-    private int minor;
-    private int patch;
+    private int minor = 0;
+    private int patch = 1;
 
     public Version() {
     }

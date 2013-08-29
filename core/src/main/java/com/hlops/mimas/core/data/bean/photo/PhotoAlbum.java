@@ -48,7 +48,7 @@ public class PhotoAlbum {
 
     public PhotoAlbum(String name) {
         setName(name);
-        setVersion(MimasConfig.getInstance().getPhotoConfig().getVersion());
+        setVersion(MimasConfig.getInstance().getVersion());
     }
 
     @NotNull

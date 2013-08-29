@@ -9,7 +9,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -27,7 +27,7 @@ public class MimasConfigTest extends Assert {
 
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(MimasConfig.getInstance(), System.out);
+        marshaller.marshal(new MimasConfig(), System.out);
     }
 
     @Test
@@ -38,17 +38,18 @@ public class MimasConfigTest extends Assert {
 
     @Test
     public void testPrintSchema() throws Exception {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
         JAXBContext jc = JAXBContext.newInstance(MimasConfig.class);
         jc.generateSchema(new SchemaOutputResolver() {
             @Override
             public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
-                StreamResult result = new StreamResult(os);
+                if ("schema1.xsd".equals(suggestedFileName)) {
+                    suggestedFileName = "mimas.xsd";
+                }
+                StreamResult result = new StreamResult(new File("./core/src/main/resources/", suggestedFileName));
                 result.setSystemId(suggestedFileName);
                 return result;
             }
         });
-        System.out.println(os.toString());
     }
 
 }
