@@ -4,8 +4,11 @@ import com.hlops.mimas.core.config.VersionConfig;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,25 +16,65 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Date: 7/15/13
  * Time: 7:25 PM
  */
+@SuppressWarnings({"FieldCanBeLocal"})
 @XmlRootElement(name = "rootManager")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RootManagerBean extends VersionConfig {
+public class RootManagerBean {
 
-    @XmlElement(name = "path")
-    private PathBean pathBean;
+    public enum FileSystemSyntax {glob, regexp}
+
+    @XmlAttribute(required = true)
+    private String id;
+
+    @XmlAttribute(required = true)
+    private String path;
+
+    @XmlAttribute(required = false)
+    private boolean caseSensitive = false;
+
+    @XmlAttribute(required = false)
+    private FileSystemSyntax syntax = FileSystemSyntax.glob;
+
+    private List<String> includes = new ArrayList<String>();
+
+    private List<String> excludes = new ArrayList<String>();
 
     public RootManagerBean() {
     }
 
-    public RootManagerBean(PathBean pathBean) {
-        this.pathBean = pathBean;
+    public String getId() {
+        return id;
     }
 
-    public PathBean getPathBean() {
-        return pathBean;
+    public String getPath() {
+        return path;
     }
 
-    public void setPathBean(PathBean pathBean) {
-        this.pathBean = pathBean;
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public String isSyntax() {
+        return syntax.name();
+    }
+
+    protected void setSyntax(String syntax) {
+        this.syntax = FileSystemSyntax.valueOf(syntax);
+    }
+
+    public List<String> getIncludes() {
+        return includes;
+    }
+
+    public List<String> getExcludes() {
+        return excludes;
+    }
+
+    protected void setIncludes(List<String> includes) {
+        this.includes = Collections.unmodifiableList(includes);
+    }
+
+    protected void setExcludes(List<String> excludes) {
+        this.excludes = Collections.unmodifiableList(excludes);
     }
 }

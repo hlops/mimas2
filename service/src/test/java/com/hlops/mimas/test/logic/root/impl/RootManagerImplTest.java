@@ -1,7 +1,6 @@
 package com.hlops.mimas.test.logic.root.impl;
 
 import com.hlops.mimas.core.data.bean.Version;
-import com.hlops.mimas.core.data.bean.rootManager.PathBean;
 import com.hlops.mimas.core.data.bean.rootManager.RootManagerBean;
 import junit.framework.TestCase;
 
@@ -22,20 +21,7 @@ public class RootManagerImplTest extends TestCase {
 
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        final PathBean bean = new PathBean("path");
-        bean.getIncludes().add("*.css");
-        bean.getIncludes().add("*.js");
-        bean.getIncludes().add("**/*.js");
-        final RootManagerBean rootManager = new RootManagerBean(bean);
-
-        final PathBean bean1 = new PathBean("path1");
-        bean1.getExcludes().add("**/*.js");
-        bean.getRoots().add(bean1);
-        bean.getRoots().add(bean1);
-        bean.getRoots().add(bean1);
-
-        Version version = new Version(rootManager.getVersion());
-        assertTrue(version.isCompatible(new Version("1.0.0")));
+        final RootManagerBean rootManager = new RootManagerBean();
 
         marshaller.marshal(rootManager, System.out);
     }

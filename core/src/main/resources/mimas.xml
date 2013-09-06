@@ -12,6 +12,10 @@
     </m:syncConfig>
 
     <m:managerConfig>
+        <m:root id="foto" path="~/tom" caseSensitive="false" syntax="glob">
+            <include>*.gif</include>
+            <exclude>./**</exclude>
+        </m:root>
     </m:managerConfig>
 
     <m:photoConfig>

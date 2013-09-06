@@ -1,8 +1,10 @@
 package com.hlops.mimas.core.config;
 
-import com.hlops.mimas.core.data.bean.rootManager.PathBean;
+import com.hlops.mimas.core.data.bean.rootManager.RootManagerBean;
 
 import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +17,10 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RootManagerConfig {
 
-    @XmlElement(name = "path")
-    private PathBean pathBean = new PathBean();
+    @XmlElement()
+    private List<RootManagerBean> roots = new ArrayList<>();
+
+    public List<RootManagerBean> getRoots() {
+        return roots;
+    }
 }
