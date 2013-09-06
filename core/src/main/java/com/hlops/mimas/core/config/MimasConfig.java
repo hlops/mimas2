@@ -36,26 +36,6 @@ public class MimasConfig extends VersionConfig {
     @XmlElement(name = "managerConfig", required = true)
     private RootManagerConfig rootManagerConfig = new RootManagerConfig();
 
-    @XmlTransient
-    private static MimasConfig instance = loadMimasConfig();
-
-    private static MimasConfig loadMimasConfig() {
-        try {
-            JAXBContext jc = JAXBContext.newInstance(MimasConfig.class);
-            URL resource = MimasConfig.class.getResource("/mimas.xml");
-            if (resource == null) {
-                throw new RuntimeException("Could not find configuration");
-            }
-            return (MimasConfig) jc.createUnmarshaller().unmarshal(resource);
-        } catch (JAXBException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    public static MimasConfig getInstance() {
-        return instance;
-    }
-
     public MimasConfig() {
     }
 
@@ -73,5 +53,9 @@ public class MimasConfig extends VersionConfig {
 
     public SyncConfig getSyncConfig() {
         return syncConfig;
+    }
+
+    public RootManagerConfig getRootManagerConfig() {
+        return rootManagerConfig;
     }
 }

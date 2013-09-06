@@ -1,5 +1,6 @@
 package com.hlops.mimas.test.core.config;
 
+import com.hlops.mimas.core.config.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,8 +33,8 @@ public class MimasConfigTest extends Assert {
 
     @Test
     public void testConfig() throws Exception {
-        assertNotNull(MimasConfig.getInstance().getVersion());
-        assertNotNull(MimasConfig.getInstance().getDateFormat());
+        assertNotNull(Mimas.getConfig().getVersion());
+        assertNotNull(Mimas.getConfig().getDateFormat());
     }
 
     @Test

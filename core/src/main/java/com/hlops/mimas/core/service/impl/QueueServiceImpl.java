@@ -1,5 +1,6 @@
 package com.hlops.mimas.core.service.impl;
 
+import com.hlops.mimas.core.config.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import com.hlops.mimas.core.data.EntityKey;
 import com.hlops.mimas.core.data.KeyProvider;
@@ -31,7 +32,7 @@ public class QueueServiceImpl implements QueueService {
     private static Logger logger = LoggerFactory.getLogger(QueueService.class);
 
     public QueueServiceImpl() {
-        poolSize.set(MimasConfig.getInstance().getSyncConfig().getQueueExecutors());
+        poolSize.set(Mimas.getConfig().getSyncConfig().getQueueExecutors());
         threadExecutor = new ThreadPoolExecutor(poolSize.intValue(), poolSize.intValue(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()) {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {

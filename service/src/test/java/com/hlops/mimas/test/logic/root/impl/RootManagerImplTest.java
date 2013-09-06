@@ -1,6 +1,5 @@
 package com.hlops.mimas.test.logic.root.impl;
 
-import com.hlops.mimas.core.data.bean.Version;
 import com.hlops.mimas.core.data.bean.rootManager.RootManagerBean;
 import junit.framework.TestCase;
 

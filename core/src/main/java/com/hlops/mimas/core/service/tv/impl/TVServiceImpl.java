@@ -1,5 +1,6 @@
 package com.hlops.mimas.core.service.tv.impl;
 
+import com.hlops.mimas.core.config.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import com.hlops.mimas.core.data.bean.tv.TeleProgramItem;
 import com.hlops.mimas.core.service.tv.TVService;
@@ -96,7 +97,7 @@ public class TVServiceImpl implements TVService {
             xml.writeDTD("<!DOCTYPE tv SYSTEM \"http://www.teleguide.info/xmltv.dtd\">");
             xml.writeEmptyElement("tv");
             // todo: implement tv version
-            xml.writeAttribute("generator-info-name", "mimas.tv/" + MimasConfig.getInstance().getVersion());
+            xml.writeAttribute("generator-info-name", "mimas.tv/" + Mimas.getConfig().getVersion());
             xml.writeAttribute("generator-info-url", "http://mimas.hlops.ru/tv");
             xml.writeEndDocument();
         } finally {

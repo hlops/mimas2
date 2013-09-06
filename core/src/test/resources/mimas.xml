@@ -12,6 +12,18 @@
     </m:syncConfig>
 
     <m:managerConfig>
+        <m:roots>
+            <m:root id="foto" path="~/tom">
+                <m:include>*.gif</m:include>
+                <m:exclude>./**</m:exclude>
+            </m:root>
+            <m:root id="video" path="~/tom">
+                <m:include>*.mkv</m:include>
+                <m:include>*.avi</m:include>
+                <m:include>*.ts</m:include>
+                <m:exclude>./**</m:exclude>
+            </m:root>
+        </m:roots>
     </m:managerConfig>
 
     <m:photoConfig>

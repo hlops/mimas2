@@ -1,6 +1,6 @@
 package com.hlops.mimas.core.data.bean.photo;
 
-import com.hlops.mimas.core.config.MimasConfig;
+import com.hlops.mimas.core.config.Mimas;
 import com.hlops.mimas.core.data.bean.Version;
 import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public class PhotoAlbum {
 
     public PhotoAlbum(String name) {
         setName(name);
-        setVersion(MimasConfig.getInstance().getVersion());
+        setVersion(Mimas.getConfig().getVersion());
     }
 
     @NotNull

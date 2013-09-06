@@ -1,5 +1,6 @@
 package com.hlops.mimas.core.service.photo.impl;
 
+import com.hlops.mimas.core.config.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import com.hlops.mimas.core.data.TaskKey;
 import com.hlops.mimas.core.data.bean.photo.Photo;
@@ -71,11 +72,11 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
     }
 
     private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
-        File configPath = new File(key.getFile(), MimasConfig.getInstance().getMimasFolderName());
+        File configPath = new File(key.getFile(), Mimas.getConfig().getMimasFolderName());
         if (!configPath.exists()) {
             createConfig(configPath);
         }
-        File configFile = new File(configPath, MimasConfig.getInstance().getPhotoConfig().getConfigFileName());
+        File configFile = new File(configPath, Mimas.getConfig().getPhotoConfig().getConfigFileName());
 
         PhotoAlbum album;
         if (configFile.exists()) {
@@ -94,14 +95,14 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
 
     @SuppressWarnings("RedundantIfStatement")
     private boolean isActual(File configFile, PhotoAlbum album) {
-        if (MimasConfig.getInstance().getPhotoConfig().isRecreateConfig()) {
+        if (Mimas.getConfig().getPhotoConfig().isRecreateConfig()) {
             return false;
         }
 
         if (!configFile.exists() || configFile.lastModified() < configFile.getParentFile().getParentFile().lastModified()) {
             return false;
         }
-        if (!album.getVersion().isCompatible(MimasConfig.getInstance().getVersion())) {
+        if (!album.getVersion().isCompatible(Mimas.getConfig().getVersion())) {
             return false;
         }
         return true;
@@ -117,7 +118,7 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         File[] files = key.getFile().listFiles(new FileFilter() {
             public boolean accept(File f) {
                 //noinspection SimplifiableIfStatement
-                if (wildcardMatches(f, MimasConfig.getInstance().getPhotoConfig().getIncludedWildcard())) {
+                if (wildcardMatches(f, Mimas.getConfig().getPhotoConfig().getIncludedWildcard())) {
                     return !wildcardMatches(f, oldAlbum.getExcludedWildcard());
                 }
                 return false;
