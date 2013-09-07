@@ -1,7 +1,6 @@
 package com.hlops.mimas.core.service.impl;
 
-import com.hlops.mimas.core.config.Mimas;
-import com.hlops.mimas.core.config.MimasConfig;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.data.EntityKey;
 import com.hlops.mimas.core.data.KeyProvider;
 import com.hlops.mimas.core.data.TaskKey;

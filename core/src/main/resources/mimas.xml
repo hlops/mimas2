@@ -12,6 +12,9 @@
     </m:syncConfig>
 
     <m:managerConfig>
+        <m:path root=".">
+            <m:excludes>213</m:excludes>
+        </m:path>
     </m:managerConfig>
 
     <m:photoConfig>

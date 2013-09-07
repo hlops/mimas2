@@ -1,9 +1,6 @@
 package com.hlops.mimas.core.config;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.*;
-import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +13,7 @@ import java.net.URL;
 @XmlRootElement(name = "mimas")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
-        "dateFormat", "mimasFolderName", "syncConfig", "rootManagerConfig", "photoConfig"
+        "dateFormat", "mimasFolderName", "syncConfig", "rootConfig", "photoConfig"
 })
 @SuppressWarnings("FieldCanBeLocal")
 public class MimasConfig extends VersionConfig {
@@ -34,7 +31,7 @@ public class MimasConfig extends VersionConfig {
     private PhotoConfig photoConfig = new PhotoConfig();
 
     @XmlElement(name = "managerConfig", required = true)
-    private RootManagerConfig rootManagerConfig = new RootManagerConfig();
+    private RootConfig rootConfig = new RootConfig();
 
     public MimasConfig() {
     }
@@ -55,7 +52,7 @@ public class MimasConfig extends VersionConfig {
         return syncConfig;
     }
 
-    public RootManagerConfig getRootManagerConfig() {
-        return rootManagerConfig;
+    public RootConfig getRootConfig() {
+        return rootConfig;
     }
 }

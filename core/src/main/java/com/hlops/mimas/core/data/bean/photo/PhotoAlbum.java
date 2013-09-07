@@ -1,6 +1,6 @@
 package com.hlops.mimas.core.data.bean.photo;
 
-import com.hlops.mimas.core.config.Mimas;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.data.bean.Version;
 import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
 import org.jetbrains.annotations.NotNull;

@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.*;
  * To change this template use File | Settings | File Templates.
  */
 @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"includedWildcard", "configFileName", "recreateConfig"})
 public class PhotoConfig {

@@ -1,6 +1,6 @@
 package com.hlops.mimas.test.core.config;
 
-import com.hlops.mimas.core.config.Mimas;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import org.junit.Assert;
 import org.junit.Test;

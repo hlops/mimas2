@@ -1,9 +1,7 @@
 package com.hlops.mimas.core.data.bean.rootManager;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.*;
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +14,7 @@ import java.util.List;
  */
 @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(propOrder = {"id", "path", "caseSensitive", "syntax", "includes", "excludes"})
 public class RootManagerBean {
 
     public enum FileSystemSyntax {glob, regexp}
@@ -35,10 +34,19 @@ public class RootManagerBean {
     public RootManagerBean() {
     }
 
+    protected RootManagerBean(String id, String path) {
+        this.id = id;
+        this.path = path;
+    }
+
     @XmlID
     @XmlAttribute(required = true)
     public String getId() {
         return id;
+    }
+
+    protected void setId(String id) {
+        this.id = id;
     }
 
     @XmlAttribute(required = true)
@@ -46,9 +54,21 @@ public class RootManagerBean {
         return path;
     }
 
+    protected void setPath(String path) {
+        this.path = path;
+    }
+
     @XmlAttribute(required = false)
     public boolean isCaseSensitive() {
         return caseSensitive;
+    }
+
+    protected void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
+
+    public FileSystemSyntax getSyntax() {
+        return syntax;
     }
 
     @XmlAttribute(required = false)
@@ -56,20 +76,27 @@ public class RootManagerBean {
         return syntax.name();
     }
 
+    @Transient
+    protected void setSyntax(FileSystemSyntax syntax) {
+        this.syntax = syntax;
+    }
+
     protected void setSyntax(String syntax) {
         this.syntax = FileSystemSyntax.valueOf(syntax);
     }
 
+    @XmlElement(name = "include")
     public List<String> getIncludes() {
         return includes;
     }
 
-    public List<String> getExcludes() {
-        return excludes;
-    }
-
     protected void setIncludes(List<String> includes) {
         this.includes = Collections.unmodifiableList(includes);
+    }
+
+    @XmlElement(name = "exclude")
+    public List<String> getExcludes() {
+        return excludes;
     }
 
     protected void setExcludes(List<String> excludes) {

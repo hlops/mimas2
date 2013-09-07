@@ -14,8 +14,8 @@
     <m:managerConfig>
         <m:roots>
             <m:root id="foto" path="~/tom">
-                <m:include>*.gif</m:include>
-                <m:exclude>./**</m:exclude>
+                <include>*.gif</include>
+                <exclude>./**</exclude>
             </m:root>
             <m:root id="video" path="~/tom">
                 <m:include>*.mkv</m:include>

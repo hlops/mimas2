@@ -1,7 +1,6 @@
 package com.hlops.mimas.core.service.photo.impl;
 
-import com.hlops.mimas.core.config.Mimas;
-import com.hlops.mimas.core.config.MimasConfig;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.data.TaskKey;
 import com.hlops.mimas.core.data.bean.photo.Photo;
 import com.hlops.mimas.core.data.bean.photo.PhotoAlbum;

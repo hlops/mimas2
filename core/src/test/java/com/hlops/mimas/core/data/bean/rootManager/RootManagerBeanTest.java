@@ -1,6 +1,6 @@
 package com.hlops.mimas.core.data.bean.rootManager;
 
-import com.hlops.mimas.core.config.Mimas;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.config.MimasConfig;
 import junit.framework.TestCase;
 
@@ -14,6 +14,6 @@ public class RootManagerBeanTest extends TestCase {
 
     public void testName() throws Exception {
         final MimasConfig instance = Mimas.getConfig();
-        System.out.println(instance.getRootManagerConfig().getRoot("foto"));
+        System.out.println(instance.getRootConfig().getRoot("foto").getExcludes());
     }
 }

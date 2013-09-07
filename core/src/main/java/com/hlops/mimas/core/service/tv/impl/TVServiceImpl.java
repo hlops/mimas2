@@ -1,7 +1,6 @@
 package com.hlops.mimas.core.service.tv.impl;
 
-import com.hlops.mimas.core.config.Mimas;
-import com.hlops.mimas.core.config.MimasConfig;
+import com.hlops.mimas.core.Mimas;
 import com.hlops.mimas.core.data.bean.tv.TeleProgramItem;
 import com.hlops.mimas.core.service.tv.TVService;
 
