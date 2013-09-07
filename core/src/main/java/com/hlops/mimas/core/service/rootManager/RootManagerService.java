@@ -11,5 +11,7 @@ import java.io.File;
  */
 public interface RootManagerService {
 
-    public boolean checkFile(File f);
+    public File getFile(String path) throws RootException;
+
+    public File getFile(String id, String path) throws RootException;
 }

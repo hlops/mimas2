@@ -2,6 +2,7 @@ package com.hlops.mimas.core.data.bean.rootManager;
 
 import javax.xml.bind.annotation.*;
 import java.beans.Transient;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ public class RootManagerBean {
 
     private String id;
 
-    private String path;
+    private File path;
 
     private boolean caseSensitive = false;
 
@@ -35,8 +36,8 @@ public class RootManagerBean {
     }
 
     protected RootManagerBean(String id, String path) {
-        this.id = id;
-        this.path = path;
+        setId(id);
+        setPath(path);
     }
 
     @XmlID
@@ -51,11 +52,11 @@ public class RootManagerBean {
 
     @XmlAttribute(required = true)
     public String getPath() {
-        return path;
+        return path.getName();
     }
 
     protected void setPath(String path) {
-        this.path = path;
+        this.path = new File(path);
     }
 
     @XmlAttribute(required = false)
@@ -102,4 +103,10 @@ public class RootManagerBean {
     protected void setExcludes(List<String> excludes) {
         this.excludes = Collections.unmodifiableList(excludes);
     }
+
+    @Transient
+    public File getFile() {
+        return path;
+    }
+
 }

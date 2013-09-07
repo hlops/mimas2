@@ -13,14 +13,11 @@
 
     <m:managerConfig>
         <m:roots>
-            <m:root id="foto" path="~/tom">
-                <include>*.gif</include>
+            <m:root id="test1" path=".">
+                <include>*.*</include>
                 <exclude>./**</exclude>
             </m:root>
-            <m:root id="video" path="~/tom">
-                <m:include>*.mkv</m:include>
-                <m:include>*.avi</m:include>
-                <m:include>*.ts</m:include>
+            <m:root id="test2" path="resources/">
                 <m:exclude>./**</m:exclude>
             </m:root>
         </m:roots>

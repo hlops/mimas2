@@ -26,12 +26,11 @@ public class QueueServiceImpl implements QueueService {
 
     private final ThreadPoolExecutor threadExecutor;
     private final ConcurrentHashMap<EntityKey, Future> syncMap = new ConcurrentHashMap<EntityKey, Future>();
-    private final AtomicInteger poolSize = new AtomicInteger();
+    private final AtomicInteger poolSize = new AtomicInteger(Mimas.getConfig().getSyncConfig().getQueueExecutors());
 
     private static Logger logger = LoggerFactory.getLogger(QueueService.class);
 
     public QueueServiceImpl() {
-        poolSize.set(Mimas.getConfig().getSyncConfig().getQueueExecutors());
         threadExecutor = new ThreadPoolExecutor(poolSize.intValue(), poolSize.intValue(), 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()) {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {
