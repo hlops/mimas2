@@ -15,7 +15,7 @@
         <m:roots>
             <m:root id="test1" path=".">
                 <include>*.*</include>
-                <exclude>./**</exclude>
+                <exclude>./**/*</exclude>
             </m:root>
             <m:root id="test2" path="resources/">
                 <m:exclude>./**</m:exclude>

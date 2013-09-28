@@ -39,13 +39,13 @@ public class RootManagerServiceImpl implements RootManagerService {
     }
 
     @Override
-    public File getFile(String s) throws RootException {
+    public File getFile(String s) throws RootManagerException {
         Path path = parsePath(s);
         return getFile(path.getId(), path.getName());
     }
 
     @Override
-    public File getFile(String id, String path) throws RootException {
+    public File getFile(String id, String path) throws RootManagerException {
         RootManagerBean root = Mimas.getConfig().getRootConfig().getRoot(id);
         if (root == null) {
             throw new RootNotFoundException(id);
@@ -55,10 +55,10 @@ public class RootManagerServiceImpl implements RootManagerService {
         try {
             String canonicalPath = f.getCanonicalPath();
             if (!canonicalPath.startsWith(root.getFile().getCanonicalPath())) {
-                throw new RootException("File is not part of root \"" + root.getFile().getCanonicalPath() + "\" (" + canonicalPath + ")");
+                throw new RootManagerException("File is not part of root \"" + root.getFile().getCanonicalPath() + "\" (" + canonicalPath + ")");
             }
         } catch (IOException e) {
-            throw new RootException(e);
+            throw new RootManagerException(e);
         }
 
         for (String mask : root.getExcludes()) {
@@ -69,9 +69,9 @@ public class RootManagerServiceImpl implements RootManagerService {
         }
 
         boolean isIncluded = false;
-        for (String mask : root.getExcludes()) {
+        for (String mask : root.getIncludes()) {
             PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(root.getSyntax() + ":" + mask);
-            if (pathMatcher.matches(f.toPath())) {
+            if (pathMatcher.matches(f.toPath().relativize(root.getFile().toPath()))) {
                 isIncluded = true;
                 break;
             }

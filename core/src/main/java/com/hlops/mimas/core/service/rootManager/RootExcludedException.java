@@ -9,13 +9,13 @@ import java.io.File;
  * Time: 0:32
  * To change this template use File | Settings | File Templates.
  */
-public class RootExcludedException extends RootException {
+public class RootExcludedException extends RootManagerException {
 
     public RootExcludedException(File f, String mask) {
-        super("File \"" + f + "\" is excluded by mask \"" + mask + "\"");
+        super("File \"" + f + "\" is explicitly excluded by mask \"" + mask + "\"");
     }
 
     public RootExcludedException(File f) {
-        super("File \"" + f + "\" is not included");
+        super("File \"" + f + "\" is not included in the list of permitted files");
     }
 }
