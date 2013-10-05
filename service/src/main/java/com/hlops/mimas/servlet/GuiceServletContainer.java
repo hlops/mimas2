@@ -4,6 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.ServletModule;
+import com.hlops.mimas.core.Mimas;
+import com.hlops.mimas.core.MimasConfigFileProvider;
 import com.hlops.mimas.core.inject.CoreGuiceModule;
 import com.hlops.mimas.core.inject.DisposableModule;
 import com.hlops.mimas.inject.ServiceGuiceModule;
@@ -15,7 +17,10 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +44,12 @@ public class GuiceServletContainer extends ServletContainer {
 
     @Override
     protected void initiate(final ResourceConfig config, final WebApplication webapp) {
+        Mimas.registerMimasFileProvider(new MimasConfigFileProvider(100) {
+            @Override
+            public URL getResource() throws MalformedURLException {
+                return new File(System.getProperty("catalina.home") + "/conf/mimas/mimas.xml").toURI().toURL();
+            }
+        });
         injector = Guice.createInjector(
                 new ServletModule() {
                     @Override

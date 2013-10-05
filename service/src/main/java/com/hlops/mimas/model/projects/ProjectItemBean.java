@@ -12,25 +12,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ProjectItemBean {
 
+    private final String id;
     private String name;
     private String description;
-    private String ref;
 
-    public ProjectItemBean(String name, String description, String ref) {
-        this.name = name;
-        this.description = description;
-        this.ref = ref;
+    public ProjectItemBean(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public String getRef() {
-        return ref;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

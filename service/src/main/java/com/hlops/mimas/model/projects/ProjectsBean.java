@@ -28,7 +28,7 @@ public class ProjectsBean extends ModelBean {
 
     public ProjectsBean(CookieProvider cookieProvider) {
         super(cookieProvider);
-        projects = new ArrayList<ProjectItemBean>();
+        projects = new ArrayList<>();
     }
 
     public List<ProjectItemBean> getProjects() {

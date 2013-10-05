@@ -1,5 +1,7 @@
 package com.hlops.mimas.webService;
 
+import com.hlops.mimas.logic.projects.ProjectManager;
+import com.hlops.mimas.logic.projects.ProjectsFilter;
 import com.hlops.mimas.model.leftMenu.impl.LeftMenuOrder;
 import com.hlops.mimas.model.projects.ProjectItemBean;
 import com.hlops.mimas.model.projects.ProjectsBean;
@@ -34,7 +36,7 @@ public class Project {
         final ProjectsBean projectsBean = new ProjectsBean(new CookieProvider(httpRequest));
         final List<ProjectItemBean> projects = projectsBean.getProjects();
 
-        addFiltered(query, projects, "Photo", "My photos", "photo");
+        ProjectManager.getInstance().fillProjects(projects, new ProjectsFilter(query));
 
         final LeftMenuOrder order = (LeftMenuOrder) projectsBean.getLeftMenuItem("lbPrOA");
         if (order != null && order.isAsc()) {
@@ -43,9 +45,4 @@ public class Project {
         return projectsBean;
     }
 
-    private void addFiltered(String query, List<ProjectItemBean> projects, String name, String description, String url) {
-        if (query == null || name.toLowerCase().contains(query.toLowerCase()) || description.toLowerCase().contains(query.toLowerCase())) {
-            projects.add(new ProjectItemBean(name, description, url));
-        }
-    }
 }
