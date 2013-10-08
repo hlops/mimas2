@@ -6,11 +6,13 @@ import com.hlops.mimas.core.data.bean.photo.Photo;
 import com.hlops.mimas.core.data.bean.photo.PhotoAlbum;
 import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
 import com.hlops.mimas.core.data.key.photo.PhotoKey;
-import com.hlops.mimas.core.service.QueueService;
+import com.hlops.mimas.core.service.ServiceManager;
+import com.hlops.mimas.core.service.rootManager.RootManagerException;
 import com.hlops.mimas.core.sync.CallableTask;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +44,11 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
 
     private final PhotoAlbumKey albumKey;
     private final TaskKey taskKey;
-    private final QueueService queue;
+    private final ServiceManager serviceManager;
 
-    CreatePhotoAlbumTask(PhotoAlbumKey albumKey, QueueService queue) {
+    CreatePhotoAlbumTask(@NotNull PhotoAlbumKey albumKey, @NotNull ServiceManager serviceManager) {
         this.albumKey = albumKey;
-        this.queue = queue;
+        this.serviceManager = serviceManager;
         taskKey = new TaskKey(CreatePhotoAlbumTask.class, albumKey);
     }
 
@@ -70,8 +72,9 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         }
     }
 
-    private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException {
-        File configPath = new File(key.getFile(), Mimas.getConfig().getMimasFolderName());
+    private PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException, RootManagerException {
+        File file = serviceManager.getRootManagerService().getFile(key.getRoot(), key.getPath());
+        File configPath = new File(file, Mimas.getConfig().getMimasFolderName());
         if (!configPath.exists()) {
             createConfig(configPath);
         }
@@ -107,14 +110,15 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
         return true;
     }
 
-    private PhotoAlbum load(final PhotoAlbum oldAlbum, PhotoAlbumKey key) {
+    private PhotoAlbum load(final PhotoAlbum oldAlbum, PhotoAlbumKey key) throws RootManagerException {
         final PhotoAlbum newAlbum = new PhotoAlbum(key);
         Map<String, Photo> oldPhotos = new HashMap<String, Photo>();
         for (Photo photo : oldAlbum.getItems()) {
             oldPhotos.put(photo.getName(), photo);
         }
 
-        File[] files = key.getFile().listFiles(new FileFilter() {
+        File file = serviceManager.getRootManagerService().getFile(key.getRoot(), key.getPath());
+        File[] files = file.listFiles(new FileFilter() {
             public boolean accept(File f) {
                 //noinspection SimplifiableIfStatement
                 if (wildcardMatches(f, Mimas.getConfig().getPhotoConfig().getIncludedWildcard())) {
@@ -131,8 +135,8 @@ class CreatePhotoAlbumTask implements CallableTask<PhotoAlbum> {
                     // not modified
                     newAlbum.getItems().add(photo);
                 } else {
-                    CreatePhotoTask createPhotoTask = new CreatePhotoTask(new PhotoKey(key, f.getName()));
-                    subTasks.add(queue.getFuture(createPhotoTask));
+                    CreatePhotoTask createPhotoTask = new CreatePhotoTask(new PhotoKey(key, f.getName()), serviceManager);
+                    subTasks.add(serviceManager.getQueueService().getFuture(createPhotoTask));
                 }
             }
         }

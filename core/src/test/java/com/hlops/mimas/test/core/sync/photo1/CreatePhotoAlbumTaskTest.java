@@ -52,7 +52,7 @@ public class CreatePhotoAlbumTaskTest extends Assert {
         ThreadGroup threadGroup = new ThreadGroup("test");
         for (int i = 0; i < threads.length; i++) {
             File path = new File("core/src/test/resources/foto/" + ((i % 5) + 1));
-            PhotoAlbumKey albumKey = new PhotoAlbumKey(path);
+            PhotoAlbumKey albumKey = new PhotoAlbumKey("test", path.getName());
             threads[i] = new TestThread(threadGroup, "thread#" + i, albumKey);
         }
 

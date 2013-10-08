@@ -4,12 +4,15 @@ import com.hlops.mimas.core.data.TaskKey;
 import com.hlops.mimas.core.data.bean.photo.ImageSize;
 import com.hlops.mimas.core.data.bean.photo.Photo;
 import com.hlops.mimas.core.data.key.photo.PhotoKey;
+import com.hlops.mimas.core.service.ServiceManager;
+import com.hlops.mimas.core.service.rootManager.RootManagerException;
 import com.hlops.mimas.core.sync.CallableTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -25,20 +28,23 @@ class CreatePhotoTask implements CallableTask<Photo> {
 
     private final PhotoKey key;
     private final TaskKey taskKey;
+    private final ServiceManager serviceManager;
 
-    CreatePhotoTask(PhotoKey key) {
+    CreatePhotoTask(PhotoKey key, ServiceManager serviceManager) {
         this.key = key;
         this.taskKey = new TaskKey(this.getClass(), key);
+        this.serviceManager = serviceManager;
     }
 
     public TaskKey getKey() {
         return taskKey;
     }
 
-    private Photo getPhoto(PhotoKey key) throws IOException {
-        logger.debug("CreatePhotoTask.getPhoto {}", key.getFile().getName());
-        BufferedImage image = ImageIO.read(key.getFile());
-        return new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()), key.getFile().length(), key.getFile().lastModified());
+    private Photo getPhoto(PhotoKey key) throws IOException, RootManagerException {
+        logger.debug("CreatePhotoTask.getPhoto {}", key.getName());
+        File f = new File(serviceManager.getRootManagerService().getFile(key.getAlbum()), key.getName());
+        BufferedImage image = ImageIO.read(f);
+        return new Photo(key.getName(), null, new ImageSize(image.getWidth(), image.getHeight()), f.length(), f.lastModified());
     }
 
     public Photo call() throws Exception {

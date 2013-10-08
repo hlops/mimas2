@@ -1,7 +1,7 @@
 package com.hlops.mimas.servlet;
 
 import com.hlops.mimas.core.service.rootManager.RootManagerException;
-import com.hlops.mimas.core.service.rootManager.RootManagerService;
+import com.hlops.mimas.core.service.RootManagerService;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.spi.container.WebApplication;
 

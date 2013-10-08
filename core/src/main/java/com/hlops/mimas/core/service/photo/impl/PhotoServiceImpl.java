@@ -5,7 +5,7 @@ import com.hlops.mimas.core.data.bean.photo.Photo;
 import com.hlops.mimas.core.data.bean.photo.PhotoAlbum;
 import com.hlops.mimas.core.data.key.photo.PhotoAlbumKey;
 import com.hlops.mimas.core.data.key.photo.PhotoKey;
-import com.hlops.mimas.core.service.QueueService;
+import com.hlops.mimas.core.service.ServiceManager;
 import com.hlops.mimas.core.service.photo.PhotoService;
 
 import javax.xml.bind.JAXBException;
@@ -21,15 +21,15 @@ import java.util.concurrent.ExecutionException;
 public class PhotoServiceImpl implements PhotoService {
 
     @Inject
-    private QueueService queue;
+    private ServiceManager serviceManager;
 
     // todo - handle exceptions
     public PhotoAlbum getAlbum(PhotoAlbumKey key) throws JAXBException, ExecutionException, InterruptedException {
-        return queue.getFuture(new CreatePhotoAlbumTask(key, queue)).get();
+        return serviceManager.getQueueService().getFuture(new CreatePhotoAlbumTask(key, serviceManager)).get();
     }
 
     public Photo getPhoto(PhotoKey key) throws JAXBException, ExecutionException, InterruptedException {
-        return queue.getFuture(new CreatePhotoTask(key)).get();
+        return serviceManager.getQueueService().getFuture(new CreatePhotoTask(key, serviceManager)).get();
     }
 
 }

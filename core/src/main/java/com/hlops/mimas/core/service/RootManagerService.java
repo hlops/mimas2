@@ -1,4 +1,7 @@
-package com.hlops.mimas.core.service.rootManager;
+package com.hlops.mimas.core.service;
+
+import com.hlops.mimas.core.data.FileKey;
+import com.hlops.mimas.core.service.rootManager.RootManagerException;
 
 import java.io.File;
 
@@ -14,4 +17,6 @@ public interface RootManagerService {
     public File getFile(String path) throws RootManagerException;
 
     public File getFile(String id, String path) throws RootManagerException;
+
+    public File getFile(FileKey fileKey) throws RootManagerException;
 }

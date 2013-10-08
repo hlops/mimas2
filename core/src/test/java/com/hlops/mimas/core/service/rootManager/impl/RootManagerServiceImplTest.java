@@ -2,7 +2,7 @@ package com.hlops.mimas.core.service.rootManager.impl;
 
 import com.google.inject.Inject;
 import com.hlops.mimas.core.inject.CoreGuiceModule;
-import com.hlops.mimas.core.service.rootManager.RootManagerService;
+import com.hlops.mimas.core.service.RootManagerService;
 import com.hlops.mimas.test.GuiceJUnitRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

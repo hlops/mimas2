@@ -37,7 +37,7 @@ public class Photo {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public PhotosBean list(@QueryParam("query") String query) throws JAXBException, ExecutionException, InterruptedException {
-        final PhotoAlbumKey albumKey = new PhotoAlbumKey("D:\\Media\\mimas\\photos\\6");
+        final PhotoAlbumKey albumKey = new PhotoAlbumKey("photo", "6");
         final PhotosBean photosBean = new PhotosBean(new CookieProvider(httpRequest));
 
         PhotoAlbum album = photoService.getAlbum(albumKey);

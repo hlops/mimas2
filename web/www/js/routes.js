@@ -6,6 +6,6 @@ define(function() {
   return function(match) {
       match('', 'projects#show');
       match('projects', 'projects#show');
-      match('photo', 'photos#show');
+      match('photos', 'photos#show');
   };
 });

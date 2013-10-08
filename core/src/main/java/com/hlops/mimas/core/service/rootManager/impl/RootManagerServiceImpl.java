@@ -1,7 +1,9 @@
 package com.hlops.mimas.core.service.rootManager.impl;
 
 import com.hlops.mimas.core.Mimas;
+import com.hlops.mimas.core.data.FileKey;
 import com.hlops.mimas.core.data.bean.rootManager.RootManagerBean;
+import com.hlops.mimas.core.service.RootManagerService;
 import com.hlops.mimas.core.service.rootManager.*;
 
 import java.io.File;
@@ -71,7 +73,7 @@ public class RootManagerServiceImpl implements RootManagerService {
         boolean isIncluded = false;
         for (String mask : root.getIncludes()) {
             PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(root.getSyntax() + ":" + mask);
-            if (pathMatcher.matches(f.toPath().relativize(root.getFile().toPath()))) {
+            if (pathMatcher.matches(root.getFile().toPath().relativize(f.toPath()))) {
                 isIncluded = true;
                 break;
             }
@@ -81,5 +83,10 @@ public class RootManagerServiceImpl implements RootManagerService {
         }
 
         return f;
+    }
+
+    @Override
+    public File getFile(FileKey key) throws RootManagerException {
+        return this.getFile(key.getRoot(), key.getPath());
     }
 }

@@ -43,7 +43,7 @@ public class PhotoAlbum {
     }
 
     public PhotoAlbum(PhotoAlbumKey key) {
-        this(key.getFile().getName());
+        this(key.getPath());
     }
 
     public PhotoAlbum(String name) {

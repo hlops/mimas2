@@ -30,8 +30,7 @@ public class PhotoAlbumServiceTest extends Assert {
 
     @Test
     public void testGetConfig() throws Exception {
-        File path = new File("core/src/test/resources/foto");
-        PhotoAlbum config = photoService.getAlbum(new PhotoAlbumKey(path));
+        PhotoAlbum config = photoService.getAlbum(new PhotoAlbumKey("test1", "core/src/test/resources/foto"));
 
         JAXBContext jc = JAXBContext.newInstance(PhotoAlbum.class);
         Marshaller marshaller = jc.createMarshaller();

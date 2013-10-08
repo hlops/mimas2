@@ -16,6 +16,10 @@ public class ProjectItemBean {
     private String name;
     private String description;
 
+    public String getId() {
+        return id;
+    }
+
     public ProjectItemBean(String id) {
         this.id = id;
     }
@@ -34,5 +38,9 @@ public class ProjectItemBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRef() {
+        return id;
     }
 }
